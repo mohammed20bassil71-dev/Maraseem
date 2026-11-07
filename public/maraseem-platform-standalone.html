@@ -1,0 +1,1970 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>مراسيم | Maraseem – منصة الدعوات الإلكترونية الملكية ثلاثية الأبعاد</title>
+
+  <!-- Open Graph / WhatsApp & Telegram Preview Meta Tags -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="مراسيم | دعوة إلكترونية ملكية ثلاثية الأبعاد ✨" />
+  <meta property="og:description" content="يسرنا دعوتكم لمشاركتنا فرحتنا.. اضغط لفتح الدعوة الملكية التفاعلية 3D" />
+  <meta property="og:url" content="https://maraseem.ai.studio/" />
+  <meta name="theme-color" content="#17130F" />
+
+  <!-- 1. Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- 2. GSAP & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- 3. Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- 4. Canvas-Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <!-- 5. Google Fonts: Amiri, Cairo, Aref Ruqaa -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            champagne: '#D6B574',
+            antiqueGold: '#A98445',
+            ivory: '#F8F1E5',
+            pearl: '#FFFDF8',
+            emeraldRoyal: '#123D32',
+            royalBlack: '#17130F',
+            royalNavy: '#0B1938',
+            blush: '#EBCBC1'
+          },
+          fontFamily: {
+            amiri: ['Amiri', 'serif'],
+            cairo: ['Cairo', 'sans-serif'],
+            ruqaa: ['Aref Ruqaa', 'serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #F8F1E5;
+      color: #17130F;
+      overflow-x: hidden;
+    }
+    .font-amiri { font-family: 'Amiri', serif; }
+    .font-ruqaa { font-family: 'Aref Ruqaa', serif; }
+    .font-cairo { font-family: 'Cairo', sans-serif; }
+
+    /* Glassmorphism & Luxury Surfaces */
+    .royal-glass {
+      background: rgba(255, 253, 248, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(214, 181, 116, 0.45);
+    }
+    .royal-dark-glass {
+      background: rgba(23, 19, 15, 0.84);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(214, 181, 116, 0.45);
+    }
+    .gold-border-glow {
+      box-shadow: 0 12px 36px -8px rgba(169, 132, 69, 0.25), inset 0 0 18px rgba(214, 181, 116, 0.15);
+    }
+    .paper-texture {
+      background-color: #FFFDF8;
+      background-image: radial-gradient(rgba(214, 181, 116, 0.14) 1px, transparent 0);
+      background-size: 22px 22px;
+    }
+    @keyframes pulseHint {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.92; }
+      50% { transform: translateY(-5px) scale(1.03); opacity: 1; }
+    }
+    .animate-hint {
+      animation: pulseHint 2.4s infinite ease-in-out;
+    }
+    @keyframes soundWave {
+      0%, 100% { height: 4px; }
+      50% { height: 14px; }
+    }
+    .wave-bar {
+      width: 2.5px;
+      background-color: #D6B574;
+      border-radius: 99px;
+      animation: soundWave 0.9s infinite ease-in-out;
+    }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #F8F1E5; }
+    ::-webkit-scrollbar-thumb { background: #D6B574; border-radius: 9999px; }
+
+    /* Royal Luxury Dark Mode (الوضع الليلي الملكي للمحرر ولوحة التحكم) */
+    body.royal-dark-mode {
+      background-color: #110E0B;
+      color: #F8F1E5;
+    }
+    body.royal-dark-mode .royal-glass {
+      background: rgba(24, 20, 16, 0.92);
+      border-color: rgba(214, 181, 116, 0.45);
+      color: #F8F1E5;
+    }
+    body.royal-dark-mode #view-editor .text-royalBlack,
+    body.royal-dark-mode #main-app-header .text-royalBlack {
+      color: #F8F1E5 !important;
+    }
+    body.royal-dark-mode #view-editor .bg-pearl,
+    body.royal-dark-mode #view-editor .bg-ivory,
+    body.royal-dark-mode #view-editor .bg-ivory\/80 {
+      background-color: #16130F !important;
+      color: #F8F1E5 !important;
+      border-color: rgba(214, 181, 116, 0.4) !important;
+    }
+    body.royal-dark-mode #view-editor input,
+    body.royal-dark-mode #view-editor select,
+    body.royal-dark-mode #view-editor textarea {
+      background-color: #120F0C !important;
+      color: #F8F1E5 !important;
+      border-color: rgba(214, 181, 116, 0.45) !important;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-champagne/30 selection:text-royalBlack">
+
+  <!-- Background Ambient Three.js Canvas -->
+  <canvas id="bg-particles-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-45"></canvas>
+
+  <!-- Floating Global Audio Control Button (Appears when MP3 is active) -->
+  <button id="floating-audio-btn" onclick="toggleGlobalAudio()" title="كتم / تشغيل الموسيقى"
+    class="fixed bottom-5 left-5 z-[60] hidden items-center gap-2 px-4 py-2.5 rounded-full royal-dark-glass text-champagne shadow-2xl border border-champagne hover:scale-105 transition-all cursor-pointer">
+    <div id="audio-waves-icon" class="flex items-end gap-0.5 h-3.5">
+      <span class="wave-bar" style="animation-delay: 0s;"></span>
+      <span class="wave-bar" style="animation-delay: 0.2s;"></span>
+      <span class="wave-bar" style="animation-delay: 0.4s;"></span>
+    </div>
+    <span id="audio-btn-label" class="text-xs font-bold">الموسيقى تعمل</span>
+  </button>
+
+  <!-- 1. ROYAL HEADER -->
+  <header id="main-app-header" class="sticky top-0 z-40 royal-glass shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      <button onclick="switchTab('home')" class="flex items-center gap-3 text-right group cursor-pointer">
+        <div class="w-11 h-11 rounded-2xl bg-royalBlack border border-champagne flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+          <span class="font-amiri text-2xl font-bold text-champagne">م</span>
+        </div>
+        <div>
+          <div class="text-2xl font-bold font-amiri text-royalBlack tracking-wide">مراسيم</div>
+          <div class="text-[11px] text-antiqueGold font-semibold -mt-1">لكل دعوة حكاية • Royal 3D</div>
+        </div>
+      </button>
+
+      <nav class="hidden md:flex items-center gap-2 text-xs font-bold">
+        <button onclick="switchTab('home')" id="nav-home" class="px-4 py-2.5 rounded-xl bg-royalBlack text-champagne transition-all cursor-pointer">الرئيسية</button>
+        <button onclick="switchTab('templates')" id="nav-templates" class="px-4 py-2.5 rounded-xl hover:bg-ivory text-royalBlack/80 transition-all cursor-pointer">استكشف القوالب</button>
+        <button onclick="switchTab('graduation')" id="nav-graduation" class="px-4 py-2.5 rounded-xl hover:bg-ivory text-royalBlack/80 transition-all cursor-pointer">مجموعة التخرج 3D</button>
+        <button onclick="switchTab('editor')" id="nav-editor" class="px-4 py-2.5 rounded-xl hover:bg-ivory text-royalBlack/80 transition-all cursor-pointer">محرر الدعوات التفاعلي</button>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <button onclick="toggleStandaloneDarkMode()" id="header-dark-btn" class="px-3.5 py-2.5 rounded-xl bg-pearl hover:bg-ivory text-royalBlack border border-champagne/60 font-bold text-xs shadow-sm transition-all cursor-pointer">
+          🌙 الوضع الليلي
+        </button>
+        <button onclick="openEditorWithTemplate('tpl-grad-celebration')" class="px-4 py-2.5 rounded-xl bg-royalBlack hover:bg-emeraldRoyal text-champagne border border-champagne/60 font-bold text-xs shadow-sm transition-all cursor-pointer">
+          ✨ أنشئ دعوتك 3D
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Quick Bar -->
+    <div class="flex md:hidden items-center justify-around border-t border-champagne/30 bg-pearl/95 py-2 px-2 text-[11px] font-bold">
+      <button onclick="switchTab('home')" class="px-3 py-1.5 rounded-lg text-royalBlack">الرئيسية</button>
+      <button onclick="switchTab('templates')" class="px-3 py-1.5 rounded-lg text-royalBlack">القوالب</button>
+      <button onclick="switchTab('graduation')" class="px-3 py-1.5 rounded-lg text-antiqueGold">مجموعة التخرج</button>
+      <button onclick="switchTab('editor')" class="px-3 py-1.5 rounded-lg text-royalBlack">المحرر 3D</button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main id="main-app-container" class="relative z-10 flex-1">
+
+    <!-- ==================== VIEW 1: HOME ==================== -->
+    <section id="view-home" class="pb-20">
+      <div class="relative overflow-hidden py-16 sm:py-24 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+          <h1 class="font-amiri text-4xl sm:text-6xl font-bold text-royalBlack leading-tight mb-5">
+            مراسيم – لكل دعوة حكاية
+          </h1>
+          <p class="text-sm sm:text-lg text-royalBlack/75 max-w-2xl mx-auto leading-relaxed mb-8 font-medium">
+            منصة الدعوات الإلكترونية الملكية بتجارب افتتاح ثلاثية الأبعاد وموسيقى خاصة؛ حيث يتفاعل ضيوفك مباشرة مع الظرف الملكي، الخاتم الألماسي، قبعة التخرج، أو الفانوس الشرقي.
+          </p>
+          <div class="flex flex-wrap items-center justify-center gap-3.5">
+            <button onclick="switchTab('templates')" class="px-8 py-4 rounded-2xl bg-royalBlack hover:bg-emeraldRoyal text-champagne border border-champagne font-bold text-sm shadow-lg transition-all cursor-pointer">
+              اكتشف الدعوات
+            </button>
+            <button onclick="switchTab('graduation')" class="px-7 py-4 rounded-2xl bg-pearl hover:bg-ivory text-royalBlack border border-champagne/60 font-bold text-sm shadow-sm transition-all cursor-pointer">
+              🎓 مجموعة التخرج الملكية 3D
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+        <div class="flex flex-wrap items-center justify-center gap-2.5" id="home-category-pills"></div>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div id="home-templates-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7"></div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 2: ALL TEMPLATES ==================== -->
+    <section id="view-templates" class="hidden py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <h2 class="font-amiri text-3xl sm:text-4xl font-bold text-royalBlack mb-3">مكتبة القوالب الملكية ثلاثية الأبعاد</h2>
+        <p class="text-xs sm:text-sm text-royalBlack/70">اختر المناسبة واستعرض القوالب التفاعلية، كل قالب يفتتح بمجسم ثلاثي الأبعاد قابل للنقر المباشر مع موسيقى خلفية.</p>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-9" id="gallery-category-pills"></div>
+      <div id="gallery-templates-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7"></div>
+    </section>
+
+    <!-- ==================== VIEW 3: GRADUATION COLLECTION ==================== -->
+    <section id="view-graduation" class="hidden py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="rounded-3xl bg-gradient-to-br from-[#0B1938] via-[#102347] to-[#17130F] p-8 sm:p-12 border border-champagne/50 text-center text-pearl mb-12 shadow-2xl">
+        <span class="inline-block px-4 py-1 rounded-full bg-champagne/20 border border-champagne/50 text-champagne text-xs font-bold mb-4">
+          GRADUATION ROYAL 3D COLLECTION
+        </span>
+        <h2 class="font-amiri text-3xl sm:text-5xl font-bold text-champagne mb-4">
+          مجموعة التخرج ومشاريع التخرج ثلاثية الأبعاد
+        </h2>
+        <p class="text-xs sm:text-base text-ivory/85 max-w-2xl mx-auto leading-relaxed">
+          قوالب احتفالية متكاملة بهوية الكحلي الملكي والذهبي الشامبين، يُفتتح كل منها بالنقر المباشر على المجسم ثلاثي الأبعاد مع تخصيص مجسم التخصص العلمي.
+        </p>
+      </div>
+
+      <div id="graduation-collection-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+    </section>
+
+    <!-- ==================== VIEW 4: CUSTOMIZATION EDITOR & LIVE 3D PREVIEW ==================== -->
+    <section id="view-editor" class="hidden py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+        <!-- Editor Controls Column -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="royal-glass rounded-3xl p-6 sm:p-8 gold-border-glow">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-champagne/30 pb-4 mb-6">
+              <div>
+                <h2 class="font-amiri text-2xl font-bold text-royalBlack">استوديو تخصيص الدعوة الملكية</h2>
+                <p class="text-xs text-antiqueGold font-semibold">عدّل البيانات، الموسيقى، وتجربة الافتتاح 3D مع معاينة فورية</p>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                <button onclick="toggleStandaloneDarkMode()" id="editor-dark-btn" class="px-3.5 py-2.5 rounded-xl bg-pearl hover:bg-ivory text-royalBlack border border-champagne font-bold text-xs shadow transition-all cursor-pointer">
+                  🌙 الوضع الليلي
+                </button>
+                <button onclick="copyShareableGuestLink(this)" class="px-4 py-2.5 rounded-xl bg-emeraldRoyal hover:bg-royalBlack text-champagne border border-champagne font-bold text-xs shadow transition-all cursor-pointer">
+                  🔗 نسخ رابط الدعوة للضيوف
+                </button>
+                <button onclick="launchFullScreenExperience()" class="px-4 py-2.5 rounded-xl bg-royalBlack text-champagne border border-champagne font-bold text-xs shadow hover:bg-antiqueGold hover:text-royalBlack transition-all cursor-pointer">
+                  📱 ملء الشاشة
+                </button>
+              </div>
+            </div>
+
+            <!-- 1. Occasion Category -->
+            <div class="mb-6">
+              <label class="block text-xs font-bold text-royalBlack mb-2">1. نوع المناسبة (Occasion Category)</label>
+              <select id="edit-category" onchange="handleEditorCategoryChange(this.value)" class="w-full rounded-xl bg-pearl border border-champagne/60 px-4 py-3 text-sm font-bold text-royalBlack focus:outline-none focus:border-royalBlack">
+                <option value="wedding">دعوات الزفاف (Royal Wedding)</option>
+                <option value="engagement">دعوات الخطوبة (Engagement)</option>
+                <option value="henna">دعوات الحنّة (Henna Night)</option>
+                <option value="birthday">أعياد الميلاد (Birthday)</option>
+                <option value="graduation">حفلات التخرج (Graduation)</option>
+                <option value="graduation_project">مناقشة مشاريع التخرج (Project Graduation)</option>
+              </select>
+            </div>
+
+            <!-- 2. Opening Experience -->
+            <div class="mb-6 p-4 rounded-2xl bg-ivory/80 border border-champagne/50">
+              <div class="flex items-center justify-between mb-2">
+                <label class="text-xs font-bold text-royalBlack">2. تجربة الافتتاح ثلاثية الأبعاد (Opening Experience)</label>
+                <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-royalBlack text-champagne font-bold">تفاعلي 3D</span>
+              </div>
+              <p class="text-[11px] text-royalBlack/70 mb-3">
+                يتغير المجسم ثلاثي الأبعاد فوراً دون المساس ببيانات الدعوة أو الموسيقى المضافة.
+              </p>
+              <div id="editor-opening-modes" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+            </div>
+
+            <!-- 3. Audio & External MP3 Section -->
+            <div class="mb-6 p-4 rounded-2xl bg-gradient-to-l from-ivory to-pearl border border-champagne/60 space-y-3">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-bold text-royalBlack flex items-center gap-1.5">
+                  <span>🎵 3. الموسيقى وملفات MP3 الخارجية</span>
+                </label>
+                <button type="button" onclick="testEditorAudioPreview()" class="px-3 py-1 rounded-lg bg-royalBlack text-champagne text-[11px] font-bold hover:bg-emeraldRoyal transition-all cursor-pointer">
+                  ▶️ تجربة الصوت الآن
+                </button>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[11px] font-bold text-antiqueGold mb-1">موسيقى جاهزة حسب المناسبة:</label>
+                  <select id="edit-audio-preset" onchange="handleAudioPresetChange(this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3 py-2 text-xs font-bold text-royalBlack">
+                    <option value="">-- اختر مقطوعة جاهزة أو ضع رابطاً خاصاً --</option>
+                    <option value="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3">بيانو رومانسي هادئ (زفاف / خطوبة)</option>
+                    <option value="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3">أوركسترا الفخر الملكية (تخرج / احتفال)</option>
+                    <option value="https://cdn.pixabay.com/download/audio/2022/10/25/audio_946bc6eb4c.mp3">أجواء شرقية دافئة (ليلة الحنّة)</option>
+                    <option value="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3">موسيقى احتفالية مبهجة (عيد ميلاد)</option>
+                    <option value="none">بدون موسيقى خلفية (مؤثر اللمس فقط)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-bold text-antiqueGold mb-1">رابط MP3 خارجي مباشر (URL):</label>
+                  <input id="edit-audio-url" type="url" placeholder="https://example.com/song.mp3 أو ./music.mp3"
+                    oninput="syncEditorField('audioUrl', this.value)"
+                    class="w-full rounded-xl bg-pearl border border-champagne/50 px-3 py-2 text-xs text-left" dir="ltr" />
+                </div>
+              </div>
+
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-champagne/30">
+                <label class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-royalBlack hover:bg-emeraldRoyal text-champagne text-xs font-bold cursor-pointer transition-all">
+                  <span>📂 رفع ملف MP3 من جهازك (للمعاينة الفورية)</span>
+                  <input type="file" accept="audio/mp3,audio/*" class="hidden" onchange="handleLocalMp3Upload(this)" />
+                </label>
+                <span id="uploaded-mp3-name" class="text-[11px] text-antiqueGold font-bold truncate max-w-[220px]">
+                  يعمل تلقائياً عند نقر الضيف على مجسم 3D
+                </span>
+              </div>
+            </div>
+
+            <!-- 4. Dynamic Fields by Category -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold text-royalBlack mb-1.5">عنوان الدعوة الرئيسي</label>
+                <input id="edit-title" type="text" oninput="syncEditorField('title', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm font-semibold" />
+              </div>
+
+              <div>
+                <label id="label-primary-name" class="block text-xs font-bold text-royalBlack mb-1.5">الاسم الأول / اسم الخريج</label>
+                <input id="edit-primary-name" type="text" oninput="syncEditorField('primaryName', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm font-semibold" />
+              </div>
+
+              <div id="wrap-secondary-name">
+                <label id="label-secondary-name" class="block text-xs font-bold text-royalBlack mb-1.5">الاسم الثاني / اللقب</label>
+                <input id="edit-secondary-name" type="text" oninput="syncEditorField('secondaryName', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm font-semibold" />
+              </div>
+
+              <!-- Graduation & Project Specific Fields -->
+              <div id="grad-fields-container" class="sm:col-span-2 hidden grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-champagne/30">
+                <div>
+                  <label class="block text-xs font-bold text-royalBlack mb-1.5">اسم الجامعة</label>
+                  <input id="edit-university" type="text" oninput="syncEditorField('university', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm" placeholder="جامعة بغداد" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-royalBlack mb-1.5">الكلية والقسم</label>
+                  <input id="edit-college" type="text" oninput="syncEditorField('college', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm" placeholder="كلية الهندسة – قسم العمارة" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-royalBlack mb-1.5">الدرجة العلمية / التقدير</label>
+                  <input id="edit-degree" type="text" oninput="syncEditorField('degree', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm" placeholder="بكالوريوس بمرتبة الشرف" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-royalBlack mb-1.5">التخصص الأكاديمي (يغير المجسم العلمي 3D)</label>
+                  <select id="edit-major" onchange="handleMajorChange(this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm font-bold">
+                    <option value="engineering">الهندسة والعمارة (تروس هندسية مذهبة 3D)</option>
+                    <option value="medicine">الطب والمختبرات (حلزون DNA مزدوج 3D)</option>
+                    <option value="computer">علوم الحاسوب والذكاء الاصطناعي (نواة عصبية 3D)</option>
+                    <option value="business">إدارة الأعمال والاقتصاد (أعمدة نمو 3D)</option>
+                  </select>
+                </div>
+
+                <!-- Optional Graduation Quotes -->
+                <div class="sm:col-span-2">
+                  <label class="block text-xs font-bold text-antiqueGold mb-2">عبارات تخرج جاهزة (اضغط للاختيار الفوري):</label>
+                  <div class="flex flex-wrap gap-2">
+                    <button type="button" onclick="selectQuickQuote('رحلة تعب.. ونهاية فخر.')" class="px-3 py-1.5 rounded-xl bg-ivory hover:bg-royalBlack hover:text-champagne border border-champagne/50 text-xs font-bold transition-all cursor-pointer">«رحلة تعب.. ونهاية فخر.»</button>
+                    <button type="button" onclick="selectQuickQuote('اليوم نحصد ما زرعناه بالأمس.')" class="px-3 py-1.5 rounded-xl bg-ivory hover:bg-royalBlack hover:text-champagne border border-champagne/50 text-xs font-bold transition-all cursor-pointer">«اليوم نحصد ما زرعناه بالأمس.»</button>
+                    <button type="button" onclick="selectQuickQuote('بفضل الله تحقق الحلم.')" class="px-3 py-1.5 rounded-xl bg-ivory hover:bg-royalBlack hover:text-champagne border border-champagne/50 text-xs font-bold transition-all cursor-pointer">«بفضل الله تحقق الحلم.»</button>
+                    <button type="button" onclick="selectQuickQuote('خطوة جديدة نحو المستقبل.')" class="px-3 py-1.5 rounded-xl bg-ivory hover:bg-royalBlack hover:text-champagne border border-champagne/50 text-xs font-bold transition-all cursor-pointer">«خطوة جديدة نحو المستقبل.»</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quote & Invitation Body -->
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold text-royalBlack mb-1.5">العبارة الترحيبية / الاقتباس</label>
+                <input id="edit-quote" type="text" oninput="syncEditorField('quote', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm font-amiri" />
+              </div>
+
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold text-royalBlack mb-1.5">نص الدعوة</label>
+                <textarea id="edit-body" rows="2" oninput="syncEditorField('body', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2 text-sm"></textarea>
+              </div>
+
+              <!-- Date, Time, Venue, Map -->
+              <div>
+                <label class="block text-xs font-bold text-royalBlack mb-1.5">تاريخ المناسبة (يفعّل العداد التنازلي)</label>
+                <input id="edit-date" type="date" oninput="syncEditorField('date', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-royalBlack mb-1.5">الوقت</label>
+                <input id="edit-time" type="text" oninput="syncEditorField('time', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-royalBlack mb-1.5">مكان الحفل / القاعة</label>
+                <input id="edit-venue" type="text" oninput="syncEditorField('venue', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-royalBlack mb-1.5">المدينة والعنوان</label>
+                <input id="edit-city" type="text" oninput="syncEditorField('city', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm" />
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold text-royalBlack mb-1.5">رابط Google Maps مخصص (اختياري - أو يتم توليده تلقائياً من اسم القاعة)</label>
+                <input id="edit-map-url" type="url" placeholder="https://maps.app.goo.gl/..." oninput="syncEditorField('mapUrl', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2 text-xs text-left" dir="ltr" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Mobile 3D Preview Column -->
+        <div class="lg:col-span-5 sticky top-24">
+          <div class="mx-auto max-w-[395px] rounded-[42px] p-3 bg-royalBlack border-4 border-champagne/70 shadow-2xl">
+            <div class="relative w-full h-[710px] rounded-[32px] overflow-hidden bg-[#0E131F] flex flex-col">
+              <div id="phone-preview-mount" class="relative w-full h-full"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== STANDALONE TEMPLATE PREVIEW / GUEST MODAL ==================== -->
+  <div id="template-preview-modal" class="fixed inset-0 z-50 hidden bg-royalBlack/95 backdrop-blur-xl flex flex-col">
+    <div id="modal-top-bar" class="relative z-30 flex items-center justify-between px-4 sm:px-8 py-3.5 bg-royalBlack/85 border-b border-champagne/30 text-pearl">
+      <div class="flex items-center gap-3">
+        <button onclick="closeStandaloneModal()" class="px-3.5 py-1.5 rounded-xl bg-pearl/10 hover:bg-pearl/20 border border-champagne/40 text-xs font-bold text-champagne cursor-pointer">
+          ✕ إغلاق المعاينة
+        </button>
+        <span id="modal-template-title" class="font-amiri text-lg font-bold text-champagne truncate"></span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="reset3DStage()" class="px-3.5 py-1.5 rounded-xl bg-pearl/10 hover:bg-pearl/20 border border-champagne/40 text-xs font-bold text-pearl cursor-pointer">
+          🔄 إعادة حركة 3D
+        </button>
+        <button onclick="customizeCurrentModalTemplate()" class="px-4 py-2 rounded-xl bg-champagne text-royalBlack font-bold text-xs shadow hover:bg-antiqueGold hover:text-pearl transition-all cursor-pointer">
+          ✨ تخصيص هذا القالب
+        </button>
+      </div>
+    </div>
+
+    <div id="fullscreen-stage-mount" class="relative flex-1 w-full h-full overflow-y-auto"></div>
+  </div>
+
+  <!-- ==================== COMPLETE INTERACTIVE 3D ENGINE & AUDIO SCRIPT ==================== -->
+  <script>
+    const OCCASION_LABELS = {
+      all: 'جميع المناسبات',
+      wedding: 'دعوات الزفاف',
+      engagement: 'دعوات الخطوبة',
+      henna: 'دعوات الحنّة',
+      birthday: 'أعياد الميلاد',
+      graduation: 'حفلات التخرج',
+      graduation_project: 'مشاريع التخرج'
+    };
+
+    const CATEGORY_SVGS = {
+      graduation: `<svg class="w-8 h-8 text-champagne" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/><path d="M5 13.18v4L12 21l7-3.82v-4"/></svg>`,
+      graduation_project: `<svg class="w-8 h-8 text-champagne" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M2 17h20l2 4H0l2-4z"/><circle cx="12" cy="10" r="3"/></svg>`,
+      wedding: `<svg class="w-8 h-8 text-champagne" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 7l10 7 10-7"/></svg>`,
+      engagement: `<svg class="w-8 h-8 text-champagne" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="15" r="6"/><path d="M9 6l3-3 3 3-3 3-3-3z"/></svg>`,
+      henna: `<svg class="w-8 h-8 text-champagne" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 2h6l2 4H7l2-4z"/><path d="M7 6l-2 9 7 7 7-7-2-9H7z"/><circle cx="12" cy="12" r="2"/></svg>`,
+      birthday: `<svg class="w-8 h-8 text-champagne" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></svg>`
+    };
+
+    const OPENING_EXPERIENCES = {
+      envelope_3d: {
+        id: 'envelope_3d',
+        categories: ['wedding'],
+        titleAr: 'الظرف الملكي والختم الشمعي 3D',
+        hintAr: 'اضغط على الظرف الملكي والختم الشمعي لفتح الدعوة وتشغيل الموسيقى',
+        palette: { bg: '#0E2921', gold: '#D6B574', accent: '#123D32' }
+      },
+      curtain_3d: {
+        id: 'curtain_3d',
+        categories: ['wedding'],
+        titleAr: 'ستائر المسرح الملكي 3D',
+        hintAr: 'اضغط على الستائر المخملية لفتح المسرح والدعوة',
+        palette: { bg: '#2B0912', gold: '#D6B574', accent: '#5E1124' }
+      },
+      popup_book_3d: {
+        id: 'popup_book_3d',
+        categories: ['wedding'],
+        titleAr: 'كتاب القصر البارز 3D Pop-Up',
+        hintAr: 'اضغط على غلاف الكتاب الملكي لفتح صفحات القصر',
+        palette: { bg: '#17130F', gold: '#D6B574', accent: '#A98445' }
+      },
+      wedding_carriage_3d: {
+        id: 'wedding_carriage_3d',
+        categories: ['wedding'],
+        titleAr: 'العربة الملكية المذهبة 3D',
+        hintAr: 'اضغط على العربة الملكية لفتح أبوابها وإظهار الدعوة',
+        palette: { bg: '#132A23', gold: '#D6B574', accent: '#123D32' }
+      },
+      engagement_ring_3d: {
+        id: 'engagement_ring_3d',
+        categories: ['engagement'],
+        titleAr: 'خاتم الخطوبة الألماسي 3D',
+        hintAr: 'اضغط على خاتم الخطوبة الألماسي لفتح الدعوة',
+        palette: { bg: '#26171C', gold: '#D6B574', accent: '#EBCBC1' }
+      },
+      engagement_jewelry_box_3d: {
+        id: 'engagement_jewelry_box_3d',
+        categories: ['engagement'],
+        titleAr: 'علبة المجوهرات المخملية 3D',
+        hintAr: 'اضغط على علبة المجوهرات المخملية لفتحها',
+        palette: { bg: '#231419', gold: '#D6B574', accent: '#D8A7B1' }
+      },
+      engagement_rose_3d: {
+        id: 'engagement_rose_3d',
+        categories: ['engagement'],
+        titleAr: 'الوردة الملكية المتفتحة 3D',
+        hintAr: 'اضغط على الوردة الملكية لتتفتح وتكشف الدعوة',
+        palette: { bg: '#29151B', gold: '#D6B574', accent: '#EBCBC1' }
+      },
+      henna_lantern_3d: {
+        id: 'henna_lantern_3d',
+        categories: ['henna'],
+        titleAr: 'الفانوس الشرقي المضيء 3D',
+        hintAr: 'اضغط على الفانوس الشرقي المذهب لإضاءة الدعوة',
+        palette: { bg: '#2E0B13', gold: '#D6B574', accent: '#123D32' }
+      },
+      henna_box_3d: {
+        id: 'henna_box_3d',
+        categories: ['henna'],
+        titleAr: 'صندوق الحنّة المزخرف 3D',
+        hintAr: 'اضغط على صندوق الحنّة الملكي لفتحه',
+        palette: { bg: '#102E26', gold: '#D6B574', accent: '#6B1323' }
+      },
+      henna_mabkhara_3d: {
+        id: 'henna_mabkhara_3d',
+        categories: ['henna'],
+        titleAr: 'المبخرة الملكية المذهبة 3D',
+        hintAr: 'اضغط على المبخرة الملكية لإطلاق الطيب وفتح الدعوة',
+        palette: { bg: '#28120E', gold: '#D6B574', accent: '#A98445' }
+      },
+      birthday_cake_3d: {
+        id: 'birthday_cake_3d',
+        categories: ['birthday'],
+        titleAr: 'كعكة الميلاد الفاخرة 3D',
+        hintAr: 'اضغط على كعكة الميلاد والشموع للاحتفال وفتح الدعوة',
+        palette: { bg: '#24182E', gold: '#D6B574', accent: '#EBCBC1' }
+      },
+      birthday_gift_box_3d: {
+        id: 'birthday_gift_box_3d',
+        categories: ['birthday'],
+        titleAr: 'صندوق الهدايا الاحتفالي 3D',
+        hintAr: 'اضغط على صندوق الهدية المذهب لفك الشريط وفتح الدعوة',
+        palette: { bg: '#1B2038', gold: '#D6B574', accent: '#C8B6FF' }
+      },
+      graduation_cap_3d: {
+        id: 'graduation_cap_3d',
+        categories: ['graduation'],
+        titleAr: 'قبعة التخرج الملكية 3D (Graduation Celebration)',
+        hintAr: 'اضغط على قبعة التخرج لترتفع وتطلق قصاصات الاحتفال',
+        palette: { bg: '#0B1938', gold: '#D6B574', accent: '#123D32' }
+      },
+      graduation_diploma_3d: {
+        id: 'graduation_diploma_3d',
+        categories: ['graduation'],
+        titleAr: 'الوثيقة الذهبية وإكليل الغار 3D (Golden Diploma)',
+        hintAr: 'اضغط على وثيقة التخرج الذهبية لفك الشريط وفتح الدعوة',
+        palette: { bg: '#09152E', gold: '#D6B574', accent: '#A98445' }
+      },
+      graduation_night_fireworks_3d: {
+        id: 'graduation_night_fireworks_3d',
+        categories: ['graduation'],
+        titleAr: 'ليلة التخرج وصرح الجامعة 3D (Graduation Night)',
+        hintAr: 'اضغط على قبعة التخرج أمام الجامعة لإطلاق الألعاب النارية الذهبية',
+        palette: { bg: '#060F24', gold: '#D6B574', accent: '#1E3A8A' }
+      },
+      graduation_popup_book_3d: {
+        id: 'graduation_popup_book_3d',
+        categories: ['graduation'],
+        titleAr: 'كتاب التخرج البارز 3D (Graduation Pop-Up Book)',
+        hintAr: 'اضغط على كتاب التخرج الملكي لفتح مجسم الجامعة والوثيقة',
+        palette: { bg: '#0D1B3A', gold: '#D6B574', accent: '#A98445' }
+      },
+      project_laptop_3d: {
+        id: 'project_laptop_3d',
+        categories: ['graduation_project'],
+        titleAr: 'الحاسوب التفاعلي ومجسم التخصص 3D',
+        hintAr: 'اضغط على منصة المشروع التفاعلية لفتح تفاصيل المناقشة',
+        palette: { bg: '#0B1938', gold: '#D6B574', accent: '#38BDF8' }
+      },
+      project_dossier_3d: {
+        id: 'project_dossier_3d',
+        categories: ['graduation_project'],
+        titleAr: 'ملف المشروع الأكاديمي المذهب 3D',
+        hintAr: 'اضغط على ملف البحث الأكاديمي لفتح الدعوة',
+        palette: { bg: '#0F172A', gold: '#D6B574', accent: '#94A3B8' }
+      }
+    };
+
+    const TEMPLATES = [
+      {
+        id: 'tpl-grad-celebration',
+        name: 'احتفالية التخرج الملكية – Graduation Celebration',
+        category: 'graduation',
+        themeColor: '#0B1938',
+        openingMode: 'graduation_cap_3d',
+        badge: 'القالب الأول • Graduation Collection',
+        data: {
+          title: 'حفل تخرج دفعة التميز الملكية',
+          primaryName: 'اسم الخريج / الخريجة',
+          secondaryName: 'دفعة ٢٠٢٦',
+          university: 'اسم الجامعة الافتراضي',
+          college: 'اسم الكلية – القسم الأكاديمي',
+          degree: 'درجة البكالوريوس بمرتبة الشرف',
+          major: 'engineering',
+          quote: '«رحلة تعب.. ونهاية فخر.»',
+          body: 'بقلوب يملؤها الفخر والامتنان، نتشرف بدعوتكم لمشاركتنا فرحة التخرج وتتويج سنوات الجد والاجتهاد.',
+          date: '2026-12-20',
+          time: '07:30 مساءً',
+          venue: 'قاعة الاحتفالات الملكية الكبرى',
+          city: 'المدينة – العنوان الافتراضي للمكان',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3'
+        }
+      },
+      {
+        id: 'tpl-grad-diploma',
+        name: 'الوثيقة الذهبية الملكية – Golden Diploma',
+        category: 'graduation',
+        themeColor: '#09152E',
+        openingMode: 'graduation_diploma_3d',
+        badge: 'القالب الثاني • Graduation Collection',
+        data: {
+          title: 'حفل تخرج وتكريم الأوائل',
+          primaryName: 'اسم الخريج / الخريجة',
+          secondaryName: 'دفعة التفوق ٢٠٢٦',
+          university: 'اسم الجامعة الافتراضي',
+          college: 'اسم الكلية – التخصص العلمي',
+          degree: 'شهادة البكالوريوس المعتمدة',
+          major: 'medicine',
+          quote: '«اليوم نحصد ما زرعناه بالأمس.»',
+          body: 'يسعدنا تشريفكم لحضور حفل التخرج ومشاركتنا لحظات التتويج بالوثيقة الذهبية.',
+          date: '2026-12-25',
+          time: '08:00 مساءً',
+          venue: 'قاعة المؤتمرات والاحتفالات الملكية',
+          city: 'المدينة – العنوان الافتراضي للمكان',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3'
+        }
+      },
+      {
+        id: 'tpl-grad-night',
+        name: 'ليلة التخرج المضيئة – Graduation Night',
+        category: 'graduation',
+        themeColor: '#060F24',
+        openingMode: 'graduation_night_fireworks_3d',
+        badge: 'القالب الثالث • Graduation Collection',
+        data: {
+          title: 'أمسية التخرج الملكية الكبرى',
+          primaryName: 'اسم الخريج / الخريجة',
+          secondaryName: 'مرتبة الشرف والامتياز',
+          university: 'اسم الجامعة الافتراضي',
+          college: 'كلية الهندسة وتقنيات المعلومات',
+          degree: 'بكالوريوس في التخصص الأكاديمي',
+          major: 'computer',
+          quote: '«بفضل الله تحقق الحلم.»',
+          body: 'تحت سماء مضيئة بالألعاب النارية الذهبية، ننتظركم لتكتمل فرحة التخرج بحضوركم الكريم.',
+          date: '2027-01-10',
+          time: '08:30 مساءً',
+          venue: 'حدائق وقاعة القصر الملكي',
+          city: 'المدينة – العنوان الافتراضي للمكان',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3'
+        }
+      },
+      {
+        id: 'tpl-grad-popup-book',
+        name: 'كتاب التخرج البارز – Graduation Pop-Up Book',
+        category: 'graduation',
+        themeColor: '#0D1B3A',
+        openingMode: 'graduation_popup_book_3d',
+        badge: 'القالب الرابع • Graduation Collection',
+        data: {
+          title: 'حكاية نجاح وتخرج ملكي',
+          primaryName: 'اسم الخريج / الخريجة',
+          secondaryName: 'دفعة ٢٠٢٦',
+          university: 'اسم الجامعة الافتراضي',
+          college: 'كلية الإدارة والاقتصاد',
+          degree: 'درجة البكالوريوس / الماجستير',
+          major: 'business',
+          quote: '«خطوة جديدة نحو المستقبل.»',
+          body: 'نطوي صفحة الدراسة ونفتح فصلاً جديداً من النجاح، ويسرنا حضوركم حفل تخرجنا المبارك.',
+          date: '2027-01-18',
+          time: '07:00 مساءً',
+          venue: 'قاعة الاحتفالات الملكية الكبرى',
+          city: 'المدينة – العنوان الافتراضي للمكان',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3'
+        }
+      },
+      {
+        id: 'tpl-project-defense',
+        name: 'مناقشة مشروع التخرج الذكي – 3D Innovation Defense',
+        category: 'graduation_project',
+        themeColor: '#0B1938',
+        openingMode: 'project_laptop_3d',
+        badge: 'مناقشة مشروع تخرج 3D',
+        data: {
+          title: 'دعوة حضور مناقشة مشروع التخرج',
+          primaryName: 'اسم الطالب الباحث / فريق المشروع',
+          secondaryName: 'إشراف الأستاذ الدكتور المشرف',
+          university: 'اسم الجامعة الافتراضي',
+          college: 'القسم العلمي والأكاديمي المختص',
+          degree: 'مشروع تخرج لنيل درجة البكالوريوس',
+          major: 'medicine',
+          quote: '«خطوة جديدة نحو المستقبل.»',
+          body: 'نتشرف بدعوتكم لحضور العرض التقديمي ومناقشة مشروع تخرجنا واستعراض النموذج التفاعلي.',
+          date: '2026-12-15',
+          time: '10:30 صباحاً',
+          venue: 'قاعة المناقشات العلمية الكبرى',
+          city: 'المدينة – الحرم الجامعي الرئيسي',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3'
+        }
+      },
+      {
+        id: 'tpl-wedding-envelope',
+        name: 'الظرف الملكي والختم الشمعي – Royal Envelope',
+        category: 'wedding',
+        themeColor: '#123D32',
+        openingMode: 'envelope_3d',
+        badge: 'دعوة زفاف ملكية 3D',
+        data: {
+          title: 'حفل زفاف ملكي مبارك',
+          primaryName: 'اسم العريس',
+          secondaryName: 'اسم العروس',
+          university: '',
+          college: '',
+          degree: '',
+          major: 'engineering',
+          quote: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا»',
+          body: 'تتعالى الأصوات وتمتزج العبارات وتتحرك الأنامل لتخط كلمات الترحيب بدعوتكم لحضور حفل زفافنا المبارك.',
+          date: '2026-12-28',
+          time: '08:00 مساءً',
+          venue: 'قاعة القصر الزمردي الملكي للاحتفالات',
+          city: 'المدينة – العنوان الافتراضي للمكان',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3'
+        }
+      },
+      {
+        id: 'tpl-wedding-curtain',
+        name: 'أوبرا الستائر المخملية – Royal Velvet Theatre',
+        category: 'wedding',
+        themeColor: '#3A0A14',
+        openingMode: 'curtain_3d',
+        badge: 'مسرح ملكي 3D',
+        data: {
+          title: 'ليلة العمر الملكية',
+          primaryName: 'اسم العريس',
+          secondaryName: 'اسم العروس',
+          university: '',
+          college: '',
+          degree: '',
+          major: 'engineering',
+          quote: '«بارك الله لهما وبارك عليهما وجمع بينهما في خير»',
+          body: 'يسرنا دعوتكم لتكونوا شهوداً على أجمل فصول حكايتنا في ليلة زفافنا الملكية.',
+          date: '2027-01-14',
+          time: '08:30 مساءً',
+          venue: 'قاعة الأوبرا الملكية الكبرى',
+          city: 'المدينة – العنوان الافتراضي للمكان',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3'
+        }
+      },
+      {
+        id: 'tpl-engagement-ring',
+        name: 'خاتم الخطوبة الألماسي – Royal Diamond Ring',
+        category: 'engagement',
+        themeColor: '#2B161C',
+        openingMode: 'engagement_ring_3d',
+        badge: 'دعوة خطوبة 3D',
+        data: {
+          title: 'حفل خطوبة مبارك',
+          primaryName: 'اسم العريس',
+          secondaryName: 'اسم العروس',
+          university: '',
+          college: '',
+          degree: '',
+          major: 'engineering',
+          quote: '«حكاية حب تتوج بالوعد والوفاء»',
+          body: 'نتشرف بدعوتكم لمشاركتنا فرحة خطوبتنا السعيدة في أمسية ملكية مميزة.',
+          date: '2026-12-18',
+          time: '07:30 مساءً',
+          venue: 'قاعة اللؤلؤة الملكية للاحتفالات',
+          city: 'المدينة – العنوان الافتراضي للمكان',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3'
+        }
+      },
+      {
+        id: 'tpl-henna-lantern',
+        name: 'ليلة الحنّة والفانوس المذهب – Oriental Henna',
+        category: 'henna',
+        themeColor: '#2E0B13',
+        openingMode: 'henna_lantern_3d',
+        badge: 'ليلة الحنّة 3D',
+        data: {
+          title: 'ليلة الحنّة الملكية',
+          primaryName: 'اسم العروس',
+          secondaryName: 'اسم العائلة الكريمة',
+          university: '',
+          college: '',
+          degree: '',
+          major: 'engineering',
+          quote: '«ليلة من ألف ليلة وليلة بالذهب والعنبر»',
+          body: 'وسط أضواء الفوانيس الذهبية ونفحات العود، يسعدنا حضوركنّ ليلة الحنّة المباركة.',
+          date: '2026-12-22',
+          time: '07:00 مساءً',
+          venue: 'قاعة السندباد الملكية للمناسبات',
+          city: 'المدينة – العنوان الافتراضي للمكان',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/10/25/audio_946bc6eb4c.mp3'
+        }
+      },
+      {
+        id: 'tpl-birthday-cake',
+        name: 'احتفالية عيد الميلاد الملكي – Royal Birthday Cake',
+        category: 'birthday',
+        themeColor: '#24182E',
+        openingMode: 'birthday_cake_3d',
+        badge: 'عيد ميلاد 3D',
+        data: {
+          title: 'حفل عيد ميلاد سعيد',
+          primaryName: 'اسم صاحب العيد ميلاد',
+          secondaryName: 'عام جديد سعيد ✨',
+          university: '',
+          college: '',
+          degree: '',
+          major: 'engineering',
+          quote: '«كل عام وأنتَ/أنتِ بهجة القلوب ونور الأيام»',
+          body: 'ندعوكم لمشاركتنا إطفاء الشموع والاحتفال بعيد الميلاد في أجواء مبهجة.',
+          date: '2026-12-30',
+          time: '06:30 مساءً',
+          venue: 'قاعة الفرح الملكية للاحتفالات',
+          city: 'المدينة – العنوان الافتراضي للمكان',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3'
+        }
+      }
+    ];
+
+    let activeCategoryFilter = 'all';
+    let currentInvitation = JSON.parse(JSON.stringify(TEMPLATES[0]));
+    let activeThreeInstance = null;
+    let countdownInterval = null;
+
+    // ==================== DUAL AUDIO ENGINE (Web Audio API + External MP3) ====================
+    const bgAudioPlayer = new Audio();
+    bgAudioPlayer.loop = true;
+    bgAudioPlayer.preload = 'auto';
+    let isAudioMuted = false;
+
+    function playRoyalChimeAndMP3() {
+      // 1. Web Audio API Royal Harp Chime on 3D Touch
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
+        const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.11);
+          gain.gain.setValueAtTime(0.14, ctx.currentTime + idx * 0.11);
+          gain.gain.exponentialRampToValueAtTime(0.0008, ctx.currentTime + idx * 0.11 + 1.4);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + idx * 0.11);
+          osc.stop(ctx.currentTime + idx * 0.11 + 1.4);
+        });
+      } catch (e) {}
+
+      // 2. External MP3 Background Track
+      const mp3Url = currentInvitation.data.audioUrl;
+      const floatingBtn = document.getElementById('floating-audio-btn');
+      if (mp3Url && mp3Url !== 'none') {
+        if (bgAudioPlayer.src !== mp3Url) {
+          bgAudioPlayer.src = mp3Url;
+        }
+        bgAudioPlayer.muted = isAudioMuted;
+        bgAudioPlayer.volume = 0;
+        bgAudioPlayer.play().then(() => {
+          gsap.to(bgAudioPlayer, { volume: 0.8, duration: 2.2 });
+          if (floatingBtn) {
+            floatingBtn.classList.remove('hidden');
+            floatingBtn.classList.add('flex');
+          }
+          updateAudioButtonUI();
+        }).catch(() => {
+          if (floatingBtn) {
+            floatingBtn.classList.remove('hidden');
+            floatingBtn.classList.add('flex');
+          }
+        });
+      } else {
+        bgAudioPlayer.pause();
+        if (floatingBtn) floatingBtn.classList.add('hidden');
+      }
+    }
+
+    function toggleGlobalAudio() {
+      if (bgAudioPlayer.paused) {
+        isAudioMuted = false;
+        bgAudioPlayer.muted = false;
+        bgAudioPlayer.play();
+      } else {
+        isAudioMuted = !isAudioMuted;
+        bgAudioPlayer.muted = isAudioMuted;
+      }
+      updateAudioButtonUI();
+    }
+
+    function updateAudioButtonUI() {
+      const label = document.getElementById('audio-btn-label');
+      const waves = document.getElementById('audio-waves-icon');
+      if (!label || !waves) return;
+      if (isAudioMuted || bgAudioPlayer.paused) {
+        label.textContent = 'تشغيل الموسيقى 🔇';
+        waves.classList.add('opacity-30');
+      } else {
+        label.textContent = 'الموسيقى تعمل 🎵';
+        waves.classList.remove('opacity-30');
+      }
+    }
+
+    function handleAudioPresetChange(val) {
+      if (val === 'none') {
+        currentInvitation.data.audioUrl = '';
+        document.getElementById('edit-audio-url').value = '';
+        bgAudioPlayer.pause();
+      } else if (val) {
+        currentInvitation.data.audioUrl = val;
+        document.getElementById('edit-audio-url').value = val;
+      }
+    }
+
+    function handleLocalMp3Upload(input) {
+      const file = input.files && input.files[0];
+      if (!file) return;
+      const localUrl = URL.createObjectURL(file);
+      currentInvitation.data.audioUrl = localUrl;
+      document.getElementById('edit-audio-url').value = localUrl;
+      document.getElementById('uploaded-mp3-name').textContent = `تم اختيار: ${file.name}`;
+      playRoyalChimeAndMP3();
+    }
+
+    function testEditorAudioPreview() {
+      playRoyalChimeAndMP3();
+    }
+
+    // ==================== UI & GRIDS ====================
+    function renderCategoryFilters() {
+      const categories = ['all', 'graduation', 'graduation_project', 'wedding', 'engagement', 'henna', 'birthday'];
+      ['home-category-pills', 'gallery-category-pills'].forEach(containerId => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = categories.map(cat => {
+          const isActive = activeCategoryFilter === cat;
+          return `
+            <button onclick="setCategoryFilter('${cat}')"
+              class="px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer border ${
+                isActive
+                  ? 'bg-royalBlack text-champagne border-champagne shadow-md'
+                  : 'bg-pearl text-royalBlack/80 border-champagne/40 hover:border-antiqueGold'
+              }">
+              ${OCCASION_LABELS[cat]}
+            </button>
+          `;
+        }).join('');
+      });
+    }
+
+    function setCategoryFilter(cat) {
+      activeCategoryFilter = cat;
+      renderCategoryFilters();
+      renderTemplatesGrids();
+    }
+
+    const miniCard3DRegistry = new Map();
+
+    function cleanupDisposedMiniCards() {
+      for (const [id, inst] of miniCard3DRegistry.entries()) {
+        const el = document.getElementById(id);
+        if (!el || !el.isConnected) {
+          if (inst.rafId) cancelAnimationFrame(inst.rafId);
+          if (inst.observer) inst.observer.disconnect();
+          try {
+            if (inst.renderer) inst.renderer.dispose();
+          } catch (e) {}
+          miniCard3DRegistry.delete(id);
+        }
+      }
+    }
+
+    function createCleanCardHTML(tpl) {
+      const categoryLabel = OCCASION_LABELS[tpl.category] || 'دعوة ملكية';
+      const modeObj = OPENING_EXPERIENCES[tpl.openingMode];
+      const canvasId = `card-canvas-${tpl.id}-${Math.random().toString(36).substring(2, 7)}`;
+
+      // تشغيل مصغر لـ Three.js داخل الكارت بعد تحميله في الصفحة
+      setTimeout(() => {
+        initMiniCard3D(canvasId, tpl.openingMode, tpl.themeColor);
+      }, 50);
+
+      return `
+        <div onclick="openTemplatePreview('${tpl.id}')"
+          class="group rounded-3xl bg-pearl border border-champagne/45 hover:border-antiqueGold transition-all duration-300 overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-xl cursor-pointer">
+          <div class="relative w-full aspect-[4/3] overflow-hidden flex flex-col items-center justify-center p-2 text-center"
+            style="background: radial-gradient(circle at 50% 35%, ${modeObj?.palette?.accent || '#123D32'} 0%, ${tpl.themeColor} 70%, #090A0F 100%);">
+            
+            <div class="absolute inset-3 rounded-2xl border border-champagne/40 pointer-events-none z-10"></div>
+            
+            <span class="absolute top-4 right-4 z-20 px-3 py-1 rounded-full bg-royalBlack/85 border border-champagne/50 text-champagne text-[10px] font-bold">
+              ${categoryLabel}
+            </span>
+            
+            <span class="absolute top-4 left-4 z-20 px-2 py-0.5 rounded-full bg-royalBlack/75 border border-champagne/40 text-champagne text-[9px] font-bold">
+              ✨ 3D حي
+            </span>
+
+            <!-- Canvas المعاينة الحية المصغرة للكارت -->
+            <canvas id="${canvasId}" class="w-full h-full absolute inset-0 z-0 pointer-events-none"></canvas>
+
+            <div class="relative z-20 mt-auto pb-3">
+              <span class="px-3 py-1 rounded-full bg-royalBlack/80 text-ivory text-[10px] font-semibold border border-champagne/40 backdrop-blur-sm">
+                ${modeObj ? modeObj.titleAr : tpl.badge}
+              </span>
+            </div>
+          </div>
+
+          <div class="p-4 flex items-center justify-between gap-3 bg-pearl">
+            <div class="min-w-0">
+              <h3 class="text-sm font-bold text-royalBlack font-amiri truncate">${tpl.name}</h3>
+              <p class="text-[11px] text-antiqueGold font-semibold mt-0.5 truncate">${categoryLabel}</p>
+            </div>
+            <button type="button" onclick="event.stopPropagation(); openTemplatePreview('${tpl.id}')"
+              class="px-3.5 py-2 rounded-xl bg-ivory group-hover:bg-royalBlack text-royalBlack group-hover:text-champagne border border-champagne/50 text-xs font-bold transition-all shrink-0 cursor-pointer">
+              معاينة 3D
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // دالة رسم المجسم المصغر المتحرك داخل الكارت
+    function initMiniCard3D(canvasId, mode, themeColor) {
+      cleanupDisposedMiniCards();
+      const canvas = document.getElementById(canvasId);
+      if (!canvas || typeof THREE === 'undefined') return;
+      const parent = canvas.parentElement;
+      const w = (parent && parent.clientWidth) || 300;
+      const h = (parent && parent.clientHeight) || 200;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 50);
+      camera.position.set(0, 0.15, 4.3);
+
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+      scene.add(new THREE.AmbientLight(0xffffff, 1.25));
+      const dirLight = new THREE.DirectionalLight(0xffdf9e, 1.6);
+      dirLight.position.set(3, 3, 3);
+      scene.add(dirLight);
+
+      const goldMat = new THREE.MeshStandardMaterial({ color: 0xd6b574, metalness: 0.82, roughness: 0.2 });
+      const darkMat = new THREE.MeshStandardMaterial({ color: 0x0b1938, metalness: 0.3, roughness: 0.5 });
+      const ivoryMat = new THREE.MeshStandardMaterial({ color: 0xf8f1e5, metalness: 0.15, roughness: 0.25 });
+      const emeraldMat = new THREE.MeshStandardMaterial({ color: themeColor || 0x123d32, metalness: 0.25, roughness: 0.45 });
+
+      const group = new THREE.Group();
+      scene.add(group);
+
+      // رسم مجسم مصغر حسب نوع القالب
+      const modeStr = String(mode || '');
+      if (modeStr.includes('graduation')) {
+        const cap = new THREE.Mesh(new THREE.BoxGeometry(1.45, 0.08, 1.45), darkMat);
+        cap.position.y = 0.2;
+        const skull = new THREE.Mesh(new THREE.CylinderGeometry(0.48, 0.44, 0.38, 20), darkMat);
+        skull.position.y = -0.02;
+        const button = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.06, 16), goldMat);
+        button.position.y = 0.26;
+        const scroll = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.95, 16), ivoryMat);
+        scroll.rotation.z = Math.PI / 2.2;
+        scroll.position.set(0, -0.45, 0.35);
+        group.add(cap, skull, button, scroll);
+        group.rotation.x = 0.22;
+      } else if (modeStr.includes('ring') || modeStr.includes('engagement')) {
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(0.56, 0.08, 16, 36), goldMat);
+        const diamond = new THREE.Mesh(new THREE.OctahedronGeometry(0.24, 1), ivoryMat);
+        diamond.position.y = 0.68;
+        group.add(ring, diamond);
+      } else if (modeStr.includes('cake') || modeStr.includes('birthday')) {
+        const baseCake = new THREE.Mesh(new THREE.CylinderGeometry(0.78, 0.84, 0.55, 24), ivoryMat);
+        baseCake.position.y = -0.22;
+        const topTier = new THREE.Mesh(new THREE.CylinderGeometry(0.52, 0.56, 0.42, 24), goldMat);
+        topTier.position.y = 0.26;
+        const flame = new THREE.Mesh(new THREE.OctahedronGeometry(0.12, 1), goldMat);
+        flame.position.y = 0.65;
+        group.add(baseCake, topTier, flame);
+      } else if (modeStr.includes('lantern') || modeStr.includes('henna')) {
+        const lantern = new THREE.Mesh(new THREE.CylinderGeometry(0.46, 0.56, 1.15, 8), goldMat);
+        const dome = new THREE.Mesh(new THREE.ConeGeometry(0.48, 0.4, 8), emeraldMat);
+        dome.position.y = 0.75;
+        group.add(lantern, dome);
+      } else if (modeStr.includes('curtain')) {
+        const leftCurtain = new THREE.Mesh(new THREE.BoxGeometry(0.7, 1.25, 0.14), emeraldMat);
+        leftCurtain.position.x = -0.48;
+        const rightCurtain = new THREE.Mesh(new THREE.BoxGeometry(0.7, 1.25, 0.14), emeraldMat);
+        rightCurtain.position.x = 0.48;
+        const arch = new THREE.Mesh(new THREE.BoxGeometry(1.75, 0.18, 0.2), goldMat);
+        arch.position.y = 0.62;
+        group.add(leftCurtain, rightCurtain, arch);
+      } else {
+        // الافتراضي (ظرف ملكي مصغر مع ختم ذهبي)
+        const env = new THREE.Mesh(new THREE.BoxGeometry(1.55, 1.05, 0.12), ivoryMat);
+        const seal = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.08, 24), goldMat);
+        seal.rotation.x = Math.PI / 2;
+        seal.position.z = 0.08;
+        group.add(env, seal);
+      }
+
+      const state = { rafId: 0, renderer, observer: null };
+      function animateMini() {
+        if (!canvas.isConnected) {
+          cleanupDisposedMiniCards();
+          return;
+        }
+        state.rafId = requestAnimationFrame(animateMini);
+        group.rotation.y += 0.015;
+        renderer.render(scene, camera);
+      }
+      animateMini();
+      miniCard3DRegistry.set(canvasId, state);
+    }
+
+    function renderTemplatesGrids() {
+      cleanupDisposedMiniCards();
+      const filtered = activeCategoryFilter === 'all'
+        ? TEMPLATES
+        : TEMPLATES.filter(t => t.category === activeCategoryFilter);
+
+      const homeGrid = document.getElementById('home-templates-grid');
+      const galleryGrid = document.getElementById('gallery-templates-grid');
+      if (homeGrid) homeGrid.innerHTML = filtered.map(createCleanCardHTML).join('');
+      if (galleryGrid) galleryGrid.innerHTML = filtered.map(createCleanCardHTML).join('');
+
+      const gradCollection = TEMPLATES.filter(t => t.category === 'graduation' || t.category === 'graduation_project');
+      const gradGrid = document.getElementById('graduation-collection-grid');
+      if (gradGrid) gradGrid.innerHTML = gradCollection.map(createCleanCardHTML).join('');
+    }
+
+    function switchTab(tab) {
+      ['home', 'templates', 'graduation', 'editor'].forEach(id => {
+        const viewEl = document.getElementById(`view-${id}`);
+        const navEl = document.getElementById(`nav-${id}`);
+        if (viewEl) viewEl.classList.toggle('hidden', id !== tab);
+        if (navEl) {
+          navEl.className = id === tab
+            ? 'px-4 py-2.5 rounded-xl bg-royalBlack text-champagne transition-all cursor-pointer'
+            : 'px-4 py-2.5 rounded-xl hover:bg-ivory text-royalBlack/80 transition-all cursor-pointer';
+        }
+      });
+
+      if (tab === 'editor') {
+        populateEditorFields();
+        mountInteractive3DInvitation('phone-preview-mount', currentInvitation);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openEditorWithTemplate(tplId) {
+      const found = TEMPLATES.find(t => t.id === tplId) || TEMPLATES[0];
+      currentInvitation = JSON.parse(JSON.stringify(found));
+      switchTab('editor');
+    }
+
+    function populateEditorFields() {
+      const cat = currentInvitation.category;
+      document.getElementById('edit-category').value = cat;
+      document.getElementById('edit-title').value = currentInvitation.data.title || '';
+      document.getElementById('edit-primary-name').value = currentInvitation.data.primaryName || '';
+      document.getElementById('edit-secondary-name').value = currentInvitation.data.secondaryName || '';
+      document.getElementById('edit-university').value = currentInvitation.data.university || '';
+      document.getElementById('edit-college').value = currentInvitation.data.college || '';
+      document.getElementById('edit-degree').value = currentInvitation.data.degree || '';
+      document.getElementById('edit-major').value = currentInvitation.data.major || 'engineering';
+      document.getElementById('edit-quote').value = currentInvitation.data.quote || '';
+      document.getElementById('edit-body').value = currentInvitation.data.body || '';
+      document.getElementById('edit-date').value = currentInvitation.data.date || '';
+      document.getElementById('edit-time').value = currentInvitation.data.time || '';
+      document.getElementById('edit-venue').value = currentInvitation.data.venue || '';
+      document.getElementById('edit-city').value = currentInvitation.data.city || '';
+      document.getElementById('edit-map-url').value = currentInvitation.data.mapUrl || '';
+      document.getElementById('edit-audio-url').value = currentInvitation.data.audioUrl || '';
+
+      const isGrad = cat === 'graduation' || cat === 'graduation_project';
+      document.getElementById('grad-fields-container').classList.toggle('hidden', !isGrad);
+      document.getElementById('label-primary-name').textContent = isGrad ? 'اسم الخريج / صاحب المشروع' : 'الاسم الأول (العريس / صاحب الحفل)';
+      document.getElementById('label-secondary-name').textContent = isGrad ? 'الدفعة / المشرف العلمي' : 'الاسم الثاني (العروس / العائلة)';
+
+      renderEditorOpeningExperienceOptions();
+    }
+
+    function renderEditorOpeningExperienceOptions() {
+      const cat = currentInvitation.category;
+      const container = document.getElementById('editor-opening-modes');
+      const modes = Object.values(OPENING_EXPERIENCES).filter(m => m.categories.includes(cat));
+      container.innerHTML = modes.map(m => {
+        const selected = currentInvitation.openingMode === m.id;
+        return `
+          <button type="button" onclick="selectOpeningMode('${m.id}')"
+            class="p-3 rounded-xl text-right border transition-all cursor-pointer flex items-center justify-between gap-2 ${
+              selected
+                ? 'bg-royalBlack text-champagne border-champagne shadow-md'
+                : 'bg-pearl text-royalBlack border-champagne/40 hover:border-antiqueGold'
+            }">
+            <span class="text-xs font-bold">${m.titleAr}</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full ${selected ? 'bg-champagne text-royalBlack' : 'bg-ivory text-antiqueGold'} font-bold">3D</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function handleEditorCategoryChange(newCat) {
+      currentInvitation.category = newCat;
+      const validModes = Object.values(OPENING_EXPERIENCES).filter(m => m.categories.includes(newCat));
+      if (validModes.length && !validModes.some(m => m.id === currentInvitation.openingMode)) {
+        currentInvitation.openingMode = validModes[0].id;
+      }
+      populateEditorFields();
+      mountInteractive3DInvitation('phone-preview-mount', currentInvitation);
+    }
+
+    function handleMajorChange(newMajor) {
+      currentInvitation.data.major = newMajor;
+      mountInteractive3DInvitation('phone-preview-mount', currentInvitation);
+    }
+
+    function selectOpeningMode(modeId) {
+      currentInvitation.openingMode = modeId;
+      renderEditorOpeningExperienceOptions();
+      mountInteractive3DInvitation('phone-preview-mount', currentInvitation);
+    }
+
+    function selectQuickQuote(q) {
+      currentInvitation.data.quote = `«${q}»`;
+      document.getElementById('edit-quote').value = currentInvitation.data.quote;
+      updateOpenedCardDOM();
+    }
+
+    function syncEditorField(field, val) {
+      currentInvitation.data[field] = val;
+      updateOpenedCardDOM();
+      if (field === 'date') {
+        startCardCountdown();
+      }
+    }
+
+    // ==================== SHAREABLE GUEST LINK GENERATOR ====================
+    function copyShareableGuestLink(btn) {
+      try {
+        const payload = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(currentInvitation)))));
+        const shareUrl = `${window.location.origin}${window.location.pathname}#invite=${payload}`;
+        navigator.clipboard.writeText(shareUrl);
+        const originalText = btn.textContent;
+        btn.textContent = '✅ تم نسخ رابط الدعوة للضيوف!';
+        setTimeout(() => { btn.textContent = originalText; }, 2600);
+      } catch (e) {
+        btn.textContent = '✅ الرابط جاهز للمشاركة';
+      }
+    }
+
+    function checkGuestShareUrlOnLoad() {
+      const hash = window.location.hash || '';
+      if (hash.startsWith('#invite=')) {
+        try {
+          const encoded = hash.replace('#invite=', '');
+          const decoded = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(encoded)))));
+          if (decoded && decoded.data) {
+            currentInvitation = decoded;
+            document.getElementById('modal-template-title').textContent = currentInvitation.data.title || 'دعوة خاصة';
+            document.getElementById('template-preview-modal').classList.remove('hidden');
+            mountInteractive3DInvitation('fullscreen-stage-mount', currentInvitation);
+            return true;
+          }
+        } catch (e) {}
+      }
+      return false;
+    }
+
+    // ==================== STANDALONE MODAL & FULLSCREEN EXPERIENCE ====================
+    function openTemplatePreview(tplId) {
+      const found = TEMPLATES.find(t => t.id === tplId) || TEMPLATES[0];
+      currentInvitation = JSON.parse(JSON.stringify(found));
+      document.getElementById('modal-template-title').textContent = currentInvitation.name;
+      document.getElementById('template-preview-modal').classList.remove('hidden');
+      mountInteractive3DInvitation('fullscreen-stage-mount', currentInvitation);
+    }
+
+    function launchFullScreenExperience() {
+      document.getElementById('modal-template-title').textContent = currentInvitation.data.title || currentInvitation.name;
+      document.getElementById('template-preview-modal').classList.remove('hidden');
+      mountInteractive3DInvitation('fullscreen-stage-mount', currentInvitation);
+    }
+
+    function closeStandaloneModal() {
+      document.getElementById('template-preview-modal').classList.add('hidden');
+      if (window.location.hash.startsWith('#invite=')) {
+        history.replaceState(null, '', window.location.pathname);
+      }
+    }
+
+    function customizeCurrentModalTemplate() {
+      closeStandaloneModal();
+      switchTab('editor');
+    }
+
+    function reset3DStage() {
+      const modalVisible = !document.getElementById('template-preview-modal').classList.contains('hidden');
+      const targetMount = modalVisible ? 'fullscreen-stage-mount' : 'phone-preview-mount';
+      mountInteractive3DInvitation(targetMount, currentInvitation);
+    }
+
+    // ==================== SPECIALIZATION 3D EMBLEM BUILDER ====================
+    function buildSpecialization3DModel(major, goldMat, ivoryMat, darkNavyMat) {
+      const group = new THREE.Group();
+      if (major === 'medicine') {
+        // Double DNA Helix
+        for (let i = 0; i < 10; i++) {
+          const y = (i - 4.5) * 0.14;
+          const angle = i * 0.65;
+          const s1 = new THREE.Mesh(new THREE.SphereGeometry(0.08, 12, 12), goldMat);
+          s1.position.set(Math.cos(angle) * 0.35, y, Math.sin(angle) * 0.35);
+          const s2 = new THREE.Mesh(new THREE.SphereGeometry(0.08, 12, 12), ivoryMat);
+          s2.position.set(-Math.cos(angle) * 0.35, y, -Math.sin(angle) * 0.35);
+          const rung = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.7, 8), goldMat);
+          rung.position.y = y;
+          rung.rotation.z = Math.PI / 2;
+          rung.rotation.y = -angle;
+          group.add(s1, s2, rung);
+        }
+      } else if (major === 'computer') {
+        // Neural AI Core + Orbital Rings
+        const core = new THREE.Mesh(new THREE.OctahedronGeometry(0.32, 0), goldMat);
+        const r1 = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.03, 12, 48), ivoryMat);
+        r1.rotation.x = Math.PI / 3;
+        const r2 = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.03, 12, 48), goldMat);
+        r2.rotation.y = Math.PI / 3;
+        group.add(core, r1, r2);
+      } else if (major === 'business') {
+        // Rising 3D Growth Bars + Orbit
+        for (let i = 0; i < 4; i++) {
+          const h = 0.25 + i * 0.18;
+          const bar = new THREE.Mesh(new THREE.BoxGeometry(0.14, h, 0.14), i === 3 ? goldMat : ivoryMat);
+          bar.position.set((i - 1.5) * 0.22, h / 2 - 0.35, 0);
+          group.add(bar);
+        }
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(0.6, 0.03, 12, 48), goldMat);
+        group.add(ring);
+      } else {
+        // Engineering Golden Gear + Architectural Pillar
+        const gearRing = new THREE.Mesh(new THREE.TorusGeometry(0.45, 0.08, 16, 32), goldMat);
+        for (let i = 0; i < 8; i++) {
+          const tooth = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.14, 0.14), goldMat);
+          const a = (i / 8) * Math.PI * 2;
+          tooth.position.set(Math.cos(a) * 0.52, Math.sin(a) * 0.52, 0);
+          tooth.rotation.z = a;
+           gearRing.add(tooth);
+        }
+        group.add(gearRing);
+      }
+      return group;
+    }
+
+    // ==================== CORE 3D RAYCASTING CLICKABLE OBJECT ENGINE ====================
+    function mountInteractive3DInvitation(mountId, invitationObj) {
+      const mount = document.getElementById(mountId);
+      if (!mount) return;
+
+      if (activeThreeInstance && activeThreeInstance.cleanup) {
+        activeThreeInstance.cleanup();
+      }
+
+      const modeSpec = OPENING_EXPERIENCES[invitationObj.openingMode] || OPENING_EXPERIENCES.graduation_cap_3d;
+      const isGrad = invitationObj.category === 'graduation' || invitationObj.category === 'graduation_project';
+      const mapHref = invitationObj.data.mapUrl && invitationObj.data.mapUrl.trim()
+        ? invitationObj.data.mapUrl.trim()
+        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((invitationObj.data.venue || '') + ' ' + (invitationObj.data.city || ''))}`;
+
+      mount.innerHTML = `
+        <div class="relative w-full h-full min-h-[680px] flex flex-col justify-between overflow-hidden select-none"
+             style="background: radial-gradient(circle at 50% 30%, ${modeSpec.palette.accent} 0%, ${modeSpec.palette.bg} 75%, #05070B 100%);">
+
+          <!-- Three.js Interactive 3D Canvas -->
+          <canvas id="${mountId}-canvas" class="absolute inset-0 w-full h-full z-10 cursor-pointer"></canvas>
+
+          <!-- Top HUD Bar -->
+          <div id="${mountId}-hud-top" class="relative z-20 flex items-center justify-between p-4 sm:p-6 pointer-events-none">
+            <div class="px-3.5 py-1.5 rounded-full royal-dark-glass text-champagne text-[11px] font-bold">
+              ${modeSpec.titleAr}
+            </div>
+            <button type="button" id="${mountId}-skip-btn"
+              class="pointer-events-auto px-3.5 py-1.5 rounded-full royal-dark-glass text-ivory/90 hover:text-champagne text-[11px] font-bold transition-all cursor-pointer">
+              تخطي الحركة ⏭
+            </button>
+          </div>
+
+          <!-- Bottom Non-Intrusive Visual Hint (No Traditional Open Button!) -->
+          <div id="${mountId}-hud-hint" class="relative z-20 pb-8 px-4 text-center pointer-events-none flex flex-col items-center">
+            <div class="animate-hint royal-dark-glass px-6 py-3 rounded-2xl max-w-xs sm:max-w-md shadow-2xl">
+              <div class="text-champagne text-xs sm:text-sm font-bold mb-0.5">✨ اضغط على المجسم 3D لفتح الدعوة</div>
+              <div class="text-ivory/85 text-[11px] sm:text-xs">${modeSpec.hintAr}</div>
+            </div>
+          </div>
+
+          <!-- Opened Luxury Invitation Card Overlay -->
+          <div id="${mountId}-card-overlay" class="relative z-30 hidden w-full h-full overflow-y-auto px-4 py-8 sm:py-10 flex items-start justify-center bg-royalBlack/70 backdrop-blur-md">
+            <div class="w-full max-w-lg rounded-3xl paper-texture border-2 border-champagne p-6 sm:p-8 text-center shadow-[0_25px_70px_rgba(0,0,0,0.65)] relative my-auto">
+              <div class="inset-3 absolute rounded-2xl border border-champagne/40 pointer-events-none"></div>
+
+              <div class="relative z-10">
+                <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-royalBlack text-champagne text-[11px] font-bold mb-3">
+                  <span>مراسيم الملكية</span>
+                  <span>•</span>
+                  <span class="dom-inv-title">${invitationObj.data.title}</span>
+                </div>
+
+                <p class="font-amiri text-base sm:text-lg text-antiqueGold font-bold mb-3 dom-inv-quote">
+                  ${invitationObj.data.quote}
+                </p>
+
+                <h1 class="font-amiri text-2xl sm:text-4xl font-bold text-royalBlack leading-snug mb-1.5 dom-inv-primary">
+                  ${invitationObj.data.primaryName}
+                </h1>
+                <div class="font-ruqaa text-lg sm:text-2xl text-antiqueGold mb-4 dom-inv-secondary">
+                  ${invitationObj.data.secondaryName}
+                </div>
+
+                ${isGrad ? `
+                  <div class="my-4 p-4 rounded-2xl bg-[#0B1938] text-ivory border border-champagne/60 space-y-1.5 text-xs sm:text-sm">
+                    <div class="text-champagne font-bold text-sm sm:text-base dom-inv-university">${invitationObj.data.university || ''}</div>
+                    <div class="dom-inv-college">${invitationObj.data.college || ''}</div>
+                    <div class="inline-block mt-1 px-3 py-0.5 rounded-full bg-champagne/20 text-champagne text-xs font-bold dom-inv-degree">
+                      ${invitationObj.data.degree || ''}
+                    </div>
+                  </div>
+                ` : ''}
+
+                <p class="text-xs sm:text-sm text-royalBlack/80 leading-relaxed mb-5 dom-inv-body">
+                  ${invitationObj.data.body}
+                </p>
+
+                <!-- Live Countdown Timer -->
+                <div class="grid grid-cols-4 gap-2 mb-5 p-3 rounded-2xl bg-royalBlack text-champagne border border-champagne/50">
+                  <div>
+                    <div class="text-base sm:text-xl font-bold font-amiri dom-cd-days">00</div>
+                    <div class="text-[10px] text-ivory/75">يوم</div>
+                  </div>
+                  <div>
+                    <div class="text-base sm:text-xl font-bold font-amiri dom-cd-hours">00</div>
+                    <div class="text-[10px] text-ivory/75">ساعة</div>
+                  </div>
+                  <div>
+                    <div class="text-base sm:text-xl font-bold font-amiri dom-cd-mins">00</div>
+                    <div class="text-[10px] text-ivory/75">دقيقة</div>
+                  </div>
+                  <div>
+                    <div class="text-base sm:text-xl font-bold font-amiri dom-cd-secs">00</div>
+                    <div class="text-[10px] text-ivory/75">ثانية</div>
+                  </div>
+                </div>
+
+                <!-- Event Details & Google Maps Button -->
+                <div class="grid grid-cols-2 gap-3 p-4 rounded-2xl bg-ivory border border-champagne/40 text-xs mb-5">
+                  <div>
+                    <div class="text-antiqueGold font-bold mb-0.5">📅 التاريخ</div>
+                    <div class="font-bold text-royalBlack dom-inv-date">${invitationObj.data.date}</div>
+                  </div>
+                  <div>
+                    <div class="text-antiqueGold font-bold mb-0.5">🕗 الوقت</div>
+                    <div class="font-bold text-royalBlack dom-inv-time">${invitationObj.data.time}</div>
+                  </div>
+                  <div class="col-span-2 pt-2 border-t border-champagne/25">
+                    <div class="text-antiqueGold font-bold mb-0.5">📍 المكان</div>
+                    <div class="font-bold text-royalBlack dom-inv-venue">${invitationObj.data.venue}</div>
+                    <div class="text-[11px] text-royalBlack/70 mb-2.5 dom-inv-city">${invitationObj.data.city}</div>
+                    <a href="${mapHref}" target="_blank" rel="noopener noreferrer"
+                       class="dom-inv-map-link inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-royalBlack text-champagne text-[11px] font-bold hover:bg-emeraldRoyal transition-all">
+                      🗺️ فتح الموقع على خرائط Google
+                    </a>
+                  </div>
+                </div>
+
+                <!-- RSVP Section -->
+                <div class="p-4 rounded-2xl bg-pearl border border-champagne/50 text-right space-y-3">
+                  <div class="text-xs font-bold text-royalBlack text-center">تأكيد الحضور والتهنئة (RSVP)</div>
+                  <input type="text" placeholder="الاسم الكريم ورسالة التهنئة..." class="w-full rounded-xl bg-ivory/70 border border-champagne/40 px-3.5 py-2 text-xs font-semibold" />
+                  <div class="flex flex-wrap gap-2">
+                    <button type="button" onclick="triggerCelebrationRSVP(this)" class="flex-1 py-2.5 rounded-xl bg-royalBlack hover:bg-emeraldRoyal text-champagne font-bold text-xs transition-all cursor-pointer">
+                      ✓ يشرفني الحضور
+                    </button>
+                    <button type="button" onclick="replayOpeningFromCard('${mountId}')" class="px-3.5 py-2.5 rounded-xl bg-ivory text-royalBlack border border-champagne/50 font-bold text-xs cursor-pointer">
+                      🔄 إعادة فتح 3D
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      startCardCountdown();
+
+      const canvas = document.getElementById(`${mountId}-canvas`);
+      const skipBtn = document.getElementById(`${mountId}-skip-btn`);
+      const cardOverlay = document.getElementById(`${mountId}-card-overlay`);
+      const hudHint = document.getElementById(`${mountId}-hud-hint`);
+      const hudTop = document.getElementById(`${mountId}-hud-top`);
+
+      const scene = new THREE.Scene();
+      const width = mount.clientWidth || 380;
+      const height = mount.clientHeight || 680;
+      const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+      camera.position.set(0, 0.55, 6.2);
+
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      const ambient = new THREE.AmbientLight(0xfffdf8, 0.9);
+      scene.add(ambient);
+      const keyLight = new THREE.DirectionalLight(0xffdf9e, 1.7);
+      keyLight.position.set(4, 6, 5);
+      scene.add(keyLight);
+      const rimLight = new THREE.PointLight(0xd6b574, 1.5, 16);
+      rimLight.position.set(-4, -2, 3);
+      scene.add(rimLight);
+
+      const goldMat = new THREE.MeshStandardMaterial({ color: 0xd6b574, metalness: 0.84, roughness: 0.2 });
+      const darkNavyMat = new THREE.MeshStandardMaterial({ color: 0x0b1938, metalness: 0.25, roughness: 0.55 });
+      const ivoryMat = new THREE.MeshStandardMaterial({ color: 0xf8f1e5, metalness: 0.1, roughness: 0.38 });
+      const crimsonMat = new THREE.MeshStandardMaterial({ color: 0x6b1323, metalness: 0.2, roughness: 0.5 });
+      const emeraldMat = new THREE.MeshStandardMaterial({ color: 0x123d32, metalness: 0.25, roughness: 0.45 });
+      const blushMat = new THREE.MeshStandardMaterial({ color: 0xebcbc1, metalness: 0.15, roughness: 0.35 });
+
+      const clickableHeroGroup = new THREE.Group();
+      scene.add(clickableHeroGroup);
+
+      // Generous invisible hit sphere for effortless mobile tapping
+      const hitSphere = new THREE.Mesh(
+        new THREE.SphereGeometry(2.2, 16, 16),
+        new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })
+      );
+      clickableHeroGroup.add(hitSphere);
+
+      const animParts = { capTop: null, flap: null, leftDoor: null, rightDoor: null, ring: null };
+      const mode = invitationObj.openingMode;
+
+      // Build Distinct 3D Hero Models by Mode
+      if (mode === 'graduation_cap_3d' || mode === 'graduation_night_fireworks_3d') {
+        const capGroup = new THREE.Group();
+        const skullCap = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 0.85, 0.55, 32), darkNavyMat);
+        skullCap.position.y = -0.2;
+        const goldBand = new THREE.Mesh(new THREE.CylinderGeometry(0.86, 0.86, 0.1, 32), goldMat);
+        goldBand.position.y = -0.42;
+        const board = new THREE.Mesh(new THREE.BoxGeometry(2.3, 0.09, 2.3), darkNavyMat);
+        board.position.y = 0.12;
+        const boardTrim = new THREE.Mesh(new THREE.BoxGeometry(2.36, 0.04, 2.36), goldMat);
+        boardTrim.position.y = 0.12;
+        const tasselCord = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.05, 1.15, 12), goldMat);
+        tasselCord.position.set(0.85, -0.35, 0.85);
+        tasselCord.rotation.z = 0.25;
+        capGroup.add(skullCap, goldBand, board, boardTrim, tasselCord);
+        clickableHeroGroup.add(capGroup);
+        animParts.capTop = capGroup;
+
+        if (mode === 'graduation_night_fireworks_3d') {
+          const uniGroup = new THREE.Group();
+          uniGroup.position.set(0, -1.35, -1.2);
+          for (let i = -1.5; i <= 1.5; i += 1) {
+            const col = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.14, 1.4, 16), ivoryMat);
+            col.position.x = i * 0.7;
+            uniGroup.add(col);
+          }
+          const pediment = new THREE.Mesh(new THREE.ConeGeometry(1.8, 0.7, 4), goldMat);
+          pediment.position.y = 0.95;
+          pediment.rotation.y = Math.PI / 4;
+          uniGroup.add(pediment);
+          clickableHeroGroup.add(uniGroup);
+        }
+      } else if (mode === 'graduation_diploma_3d' || mode === 'project_dossier_3d') {
+        const scrollCylinder = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 2.5, 32), ivoryMat);
+        scrollCylinder.rotation.z = Math.PI / 5;
+        const ribbon = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 0.38, 32), goldMat);
+        ribbon.rotation.z = Math.PI / 5;
+        const laurelTorus = new THREE.Mesh(new THREE.TorusGeometry(1.25, 0.06, 16, 48), goldMat);
+        clickableHeroGroup.add(scrollCylinder, ribbon, laurelTorus);
+        animParts.ring = laurelTorus;
+        animParts.capTop = scrollCylinder;
+      } else if (mode === 'graduation_popup_book_3d' || mode === 'popup_book_3d') {
+        const leftPage = new THREE.Mesh(new THREE.BoxGeometry(1.35, 1.85, 0.12), darkNavyMat);
+        leftPage.position.x = -0.68;
+        const rightPage = new THREE.Mesh(new THREE.BoxGeometry(1.35, 1.85, 0.12), goldMat);
+        rightPage.position.x = 0.68;
+        const centerCastle = new THREE.Mesh(new THREE.ConeGeometry(0.55, 1.2, 6), ivoryMat);
+        centerCastle.position.z = 0.45;
+        clickableHeroGroup.add(leftPage, rightPage, centerCastle);
+        animParts.leftDoor = leftPage;
+        animParts.rightDoor = rightPage;
+      } else if (mode === 'project_laptop_3d') {
+        const base = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.1, 1.4), goldMat);
+        base.position.y = -0.65;
+        const screen = new THREE.Mesh(new THREE.BoxGeometry(2.1, 1.3, 0.08), darkNavyMat);
+        screen.position.set(0, 0.0, -0.65);
+        const majorModel = buildSpecialization3DModel(invitationObj.data.major || 'engineering', goldMat, ivoryMat, darkNavyMat);
+        majorModel.position.set(0, 0.32, 0.25);
+        clickableHeroGroup.add(base, screen, majorModel);
+        animParts.ring = majorModel;
+      } else if (mode === 'engagement_ring_3d' || mode === 'engagement_jewelry_box_3d') {
+        const boxBase = new THREE.Mesh(new THREE.BoxGeometry(1.65, 0.7, 1.65), crimsonMat);
+        boxBase.position.y = -0.55;
+        const ringBand = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.08, 24, 64), goldMat);
+        ringBand.position.y = 0.25;
+        const diamond = new THREE.Mesh(new THREE.OctahedronGeometry(0.28, 1), ivoryMat);
+        diamond.position.y = 0.92;
+        clickableHeroGroup.add(boxBase, ringBand, diamond);
+        animParts.ring = ringBand;
+        animParts.capTop = diamond;
+      } else if (mode === 'engagement_rose_3d') {
+        const roseCore = new THREE.Mesh(new THREE.DodecahedronGeometry(0.65, 1), crimsonMat);
+        const goldStem = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.08, 1.6, 16), goldMat);
+        goldStem.position.y = -1.0;
+        const halo = new THREE.Mesh(new THREE.TorusGeometry(1.15, 0.04, 16, 48), goldMat);
+        clickableHeroGroup.add(roseCore, goldStem, halo);
+        animParts.ring = halo;
+      } else if (mode === 'henna_lantern_3d' || mode === 'henna_mabkhara_3d' || mode === 'henna_box_3d') {
+        const body = new THREE.Mesh(new THREE.CylinderGeometry(0.65, 0.45, 1.5, 8), goldMat);
+        const dome = new THREE.Mesh(new THREE.ConeGeometry(0.7, 0.65, 8), crimsonMat);
+        dome.position.y = 1.05;
+        const base = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.75, 0.3, 8), emeraldMat);
+        base.position.y = -0.9;
+        clickableHeroGroup.add(body, dome, base);
+        animParts.flap = dome;
+      } else if (mode === 'birthday_cake_3d' || mode === 'birthday_gift_box_3d') {
+        const tier1 = new THREE.Mesh(new THREE.CylinderGeometry(1.1, 1.1, 0.7, 32), ivoryMat);
+        tier1.position.y = -0.5;
+        const tier2 = new THREE.Mesh(new THREE.CylinderGeometry(0.78, 0.78, 0.6, 32), blushMat);
+        tier2.position.y = 0.15;
+        const candle = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.5, 16), goldMat);
+        candle.position.y = 0.7;
+        const flame = new THREE.Mesh(new THREE.OctahedronGeometry(0.14, 1), goldMat);
+        flame.position.y = 1.05;
+        clickableHeroGroup.add(tier1, tier2, candle, flame);
+        animParts.flap = flame;
+      } else if (mode === 'curtain_3d') {
+        const leftCurtain = new THREE.Mesh(new THREE.BoxGeometry(1.35, 2.5, 0.2), crimsonMat);
+        leftCurtain.position.x = -0.7;
+        const rightCurtain = new THREE.Mesh(new THREE.BoxGeometry(1.35, 2.5, 0.2), crimsonMat);
+        rightCurtain.position.x = 0.7;
+        const arch = new THREE.Mesh(new THREE.TorusGeometry(1.45, 0.1, 16, 48, Math.PI), goldMat);
+        arch.position.y = 0.9;
+        clickableHeroGroup.add(leftCurtain, rightCurtain, arch);
+        animParts.leftDoor = leftCurtain;
+        animParts.rightDoor = rightCurtain;
+      } else if (mode === 'wedding_carriage_3d') {
+        const coach = new THREE.Mesh(new THREE.SphereGeometry(0.95, 24, 24), goldMat);
+        const w1 = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.06, 12, 32), ivoryMat);
+        w1.position.set(-0.75, -0.75, 0.6);
+        const w2 = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.06, 12, 32), ivoryMat);
+        w2.position.set(0.75, -0.75, 0.6);
+        const crownTop = new THREE.Mesh(new THREE.ConeGeometry(0.32, 0.45, 6), crimsonMat);
+        crownTop.position.y = 1.1;
+        clickableHeroGroup.add(coach, w1, w2, crownTop);
+        animParts.flap = crownTop;
+      } else {
+        // Default Royal 3D Envelope with Wax Seal
+        const envBody = new THREE.Mesh(new THREE.BoxGeometry(2.5, 1.65, 0.16), emeraldMat);
+        const envFlap = new THREE.Mesh(new THREE.ConeGeometry(1.45, 1.0, 4), goldMat);
+        envFlap.rotation.y = Math.PI / 4;
+        envFlap.rotation.x = Math.PI;
+        envFlap.position.set(0, 0.45, 0.1);
+        const waxSeal = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.12, 32), crimsonMat);
+        waxSeal.rotation.x = Math.PI / 2;
+        waxSeal.position.set(0, 0, 0.14);
+        clickableHeroGroup.add(envBody, envFlap, waxSeal);
+        animParts.flap = envFlap;
+      }
+
+      const pCount = 130;
+      const pGeo = new THREE.BufferGeometry();
+      const pPos = new Float32Array(pCount * 3);
+      for (let i = 0; i < pCount * 3; i++) pPos[i] = (Math.random() - 0.5) * 9;
+      pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+      const pMat = new THREE.PointsMaterial({ color: 0xd6b574, size: 0.06, transparent: true, opacity: 0.85 });
+      const particles = new THREE.Points(pGeo, pMat);
+      scene.add(particles);
+
+      const raycaster = new THREE.Raycaster();
+      const pointer = new THREE.Vector2();
+      let isOpening = false;
+      let isOpened = false;
+      let hovered = false;
+
+      function revealInvitationCard() {
+        if (isOpened) return;
+        isOpened = true;
+        hudHint.classList.add('hidden');
+        hudTop.classList.add('hidden');
+        cardOverlay.classList.remove('hidden');
+        gsap.fromTo(cardOverlay, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.65, ease: 'power3.out' });
+
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 75,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#D6B574', '#A98445', '#FFFDF8']
+          });
+        }
+      }
+
+      function trigger3DObjectOpening() {
+        if (isOpening || isOpened) return;
+        isOpening = true;
+
+        // Play Royal Harp Chime + External MP3 Track
+        playRoyalChimeAndMP3();
+
+        gsap.to(clickableHeroGroup.rotation, { y: Math.PI * 2, duration: 1.15, ease: 'power2.inOut' });
+        gsap.to(clickableHeroGroup.position, { y: 0.65, duration: 0.9, ease: 'back.out(1.7)' });
+        gsap.to(camera.position, { z: 4.5, duration: 1.15, ease: 'power2.inOut', onComplete: revealInvitationCard });
+
+        if (animParts.leftDoor && animParts.rightDoor) {
+          gsap.to(animParts.leftDoor.position, { x: -1.8, duration: 0.95 });
+          gsap.to(animParts.rightDoor.position, { x: 1.8, duration: 0.95 });
+        }
+        if (animParts.flap) {
+          gsap.to(animParts.flap.position, { y: 1.35, duration: 0.85 });
+        }
+      }
+
+      function updatePointer(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+        pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+      }
+
+      function onPointerMove(e) {
+        if (isOpening || isOpened) return;
+        updatePointer(e);
+        raycaster.setFromCamera(pointer, camera);
+        const hits = raycaster.intersectObjects(clickableHeroGroup.children, true);
+        hovered = hits.length > 0;
+        canvas.style.cursor = hovered ? 'pointer' : 'default';
+      }
+
+      function onPointerDown(e) {
+        if (isOpening || isOpened) return;
+        updatePointer(e);
+        raycaster.setFromCamera(pointer, camera);
+        const hits = raycaster.intersectObjects(clickableHeroGroup.children, true);
+        if (hits.length > 0) {
+          trigger3DObjectOpening();
+        }
+      }
+
+      canvas.addEventListener('pointermove', onPointerMove);
+      canvas.addEventListener('pointerdown', onPointerDown);
+      if (skipBtn) {
+        skipBtn.onclick = () => {
+          playRoyalChimeAndMP3();
+          revealInvitationCard();
+        };
+      }
+
+      let rafId = null;
+      let clock = new THREE.Clock();
+
+      function animate() {
+        rafId = requestAnimationFrame(animate);
+        const t = clock.getElapsedTime();
+
+        if (!isOpening && !isOpened) {
+          clickableHeroGroup.position.y = Math.sin(t * 1.8) * 0.12;
+          clickableHeroGroup.rotation.y = Math.sin(t * 0.7) * 0.35;
+          const targetScale = hovered ? 1.08 : 1.0;
+          clickableHeroGroup.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
+        }
+        if (animParts.ring) {
+          animParts.ring.rotation.y = t * 0.9;
+          animParts.ring.rotation.z = t * 0.45;
+        }
+        particles.rotation.y = t * 0.08;
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      activeThreeInstance = {
+        cleanup: () => {
+          if (rafId) cancelAnimationFrame(rafId);
+          canvas.removeEventListener('pointermove', onPointerMove);
+          canvas.removeEventListener('pointerdown', onPointerDown);
+          renderer.dispose();
+        }
+      };
+    }
+
+    // ==================== COUNTDOWN TIMER & DOM SYNC ====================
+    function startCardCountdown() {
+      if (countdownInterval) clearInterval(countdownInterval);
+
+      function updateTick() {
+        const dateStr = currentInvitation.data.date || '2026-12-25';
+        const target = new Date(`${dateStr}T20:00:00`).getTime();
+        const now = Date.now();
+        const diff = Math.max(0, target - now);
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const mins = Math.floor((diff / 1000 / 60) % 60);
+        const secs = Math.floor((diff / 1000) % 60);
+
+        document.querySelectorAll('.dom-cd-days').forEach(el => el.textContent = String(days).padStart(2, '0'));
+        document.querySelectorAll('.dom-cd-hours').forEach(el => el.textContent = String(hours).padStart(2, '0'));
+        document.querySelectorAll('.dom-cd-mins').forEach(el => el.textContent = String(mins).padStart(2, '0'));
+        document.querySelectorAll('.dom-cd-secs').forEach(el => el.textContent = String(secs).padStart(2, '0'));
+      }
+
+      updateTick();
+      countdownInterval = setInterval(updateTick, 1000);
+    }
+
+    function replayOpeningFromCard(mountId) {
+      mountInteractive3DInvitation(mountId, currentInvitation);
+    }
+
+    function updateOpenedCardDOM() {
+      const d = currentInvitation.data;
+      document.querySelectorAll('.dom-inv-title').forEach(el => el.textContent = d.title || '');
+      document.querySelectorAll('.dom-inv-quote').forEach(el => el.textContent = d.quote || '');
+      document.querySelectorAll('.dom-inv-primary').forEach(el => el.textContent = d.primaryName || '');
+      document.querySelectorAll('.dom-inv-secondary').forEach(el => el.textContent = d.secondaryName || '');
+      document.querySelectorAll('.dom-inv-university').forEach(el => el.textContent = d.university || '');
+      document.querySelectorAll('.dom-inv-college').forEach(el => el.textContent = d.college || '');
+      document.querySelectorAll('.dom-inv-degree').forEach(el => el.textContent = d.degree || '');
+      document.querySelectorAll('.dom-inv-body').forEach(el => el.textContent = d.body || '');
+      document.querySelectorAll('.dom-inv-date').forEach(el => el.textContent = d.date || '');
+      document.querySelectorAll('.dom-inv-time').forEach(el => el.textContent = d.time || '');
+      document.querySelectorAll('.dom-inv-venue').forEach(el => el.textContent = d.venue || '');
+      document.querySelectorAll('.dom-inv-city').forEach(el => el.textContent = d.city || '');
+
+      const mapHref = d.mapUrl && d.mapUrl.trim()
+        ? d.mapUrl.trim()
+        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((d.venue || '') + ' ' + (d.city || ''))}`;
+      document.querySelectorAll('.dom-inv-map-link').forEach(el => el.setAttribute('href', mapHref));
+    }
+
+    function triggerCelebrationRSVP(btn) {
+      btn.textContent = '🎉 تم تأكيد حضوركم بنجاح!';
+      btn.classList.add('bg-emeraldRoyal');
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 110,
+          spread: 80,
+          origin: { y: 0.65 },
+          colors: ['#D6B574', '#A98445', '#123D32', '#FFFDF8']
+        });
+      }
+    }
+
+    function initBackgroundParticles() {
+      const canvas = document.getElementById('bg-particles-canvas');
+      if (!canvas) return;
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.z = 5;
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      const count = 90;
+      const geo = new THREE.BufferGeometry();
+      const pos = new Float32Array(count * 3);
+      for (let i = 0; i < count * 3; i++) pos[i] = (Math.random() - 0.5) * 14;
+      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      const mat = new THREE.PointsMaterial({ color: 0xa98445, size: 0.045, transparent: true, opacity: 0.55 });
+      const pts = new THREE.Points(geo, mat);
+      scene.add(pts);
+
+      function loop() {
+        requestAnimationFrame(loop);
+        pts.rotation.y += 0.0008;
+        pts.rotation.x += 0.0003;
+        renderer.render(scene, camera);
+      }
+      loop();
+
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    }
+
+    function toggleStandaloneDarkMode() {
+      const isDark = document.body.classList.toggle('royal-dark-mode');
+      try { localStorage.setItem('maraseem_royal_dark_mode', isDark ? 'true' : 'false'); } catch (e) {}
+      const label = isDark ? '☀️ الوضع النهاري' : '🌙 الوضع الليلي';
+      const hBtn = document.getElementById('header-dark-btn');
+      const eBtn = document.getElementById('editor-dark-btn');
+      if (hBtn) hBtn.textContent = label;
+      if (eBtn) eBtn.textContent = label;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        if (localStorage.getItem('maraseem_royal_dark_mode') === 'true') {
+          toggleStandaloneDarkMode();
+        }
+      } catch (e) {}
+      renderCategoryFilters();
+      renderTemplatesGrids();
+      initBackgroundParticles();
+      checkGuestShareUrlOnLoad();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-cairo: 'Cairo', 'Tajawal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-en: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-amiri: 'Amiri', serif;
+    --font-cinzel: 'Cinzel', serif;
+
+    /* Official Royal Luxury Visual Identity Palette */
+    --royal-ivory: #F8F1E5;
+    --royal-white: #FFFFFF;
+    --royal-champagne: #D6B574;
+    --royal-antique-gold: #A98445;
+    --royal-emerald: #123D32;
+    --royal-black: #17130F;
+  }
+
+  html,
+  body,
+  #root {
+    max-width: 100vw;
+    overflow-x: hidden;
+    background-color: #F8F1E5;
+    color: #17130F;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html[lang="ar"] body {
+    font-family: 'Cairo', 'Tajawal', system-ui, -apple-system, sans-serif;
+    direction: rtl;
+  }
+
+  html[lang="en"] body {
+    font-family: 'Plus Jakarta Sans', 'Cairo', system-ui, -apple-system, sans-serif;
+    direction: ltr;
+  }
+}
+
+.font-amiri {
+  font-family: 'Amiri', serif;
+}
+
+.font-cairo {
+  font-family: 'Cairo', 'Tajawal', sans-serif;
+}
+
+html[lang="en"] .font-cairo {
+  font-family: 'Plus Jakarta Sans', 'Cairo', sans-serif;
+}
+
+.font-cinzel {
+  font-family: 'Cinzel', serif;
+}
+
+.font-ruqaa {
+  font-family: 'Aref Ruqaa', 'Amiri', serif;
+}
+
+.font-cormorant {
+  font-family: 'Cormorant Garamond', 'Amiri', serif;
+}
+
+.font-jetbrains {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Safe area support for iPhone & modern mobile browsers */
+.pb-safe {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+.pt-safe {
+  padding-top: max(0.75rem, env(safe-area-inset-top));
+}
+
+/* Luxury Gold and Metallic Shimmer (preserved for invitation templates) */
+.gold-gradient-text {
+  background: linear-gradient(135deg, #D6B574 0%, #A98445 50%, #D6B574 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-border-gradient {
+  border-image: linear-gradient(to right, #A98445, #D6B574, #A98445) 1;
+}
+
+/* Royal Luxury Platform Theme */
+.maraseem-platform-theme {
+  background-color: #F8F1E5;
+  color: #17130F;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Respect user Reduced Motion settings */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom subtle scrollbars */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ==========================================================================
+   MARASEEM ROYAL LUXURY DARK MODE (الوضع الليلي الملكي للمحرر ولوحة التحكم)
+   Preserves Champagne Gold (#D6B574), Ivory (#F8F1E5), Royal Emerald (#123D32),
+   and Royal Black (#17130F) while reducing eye strain.
+   ========================================================================== */
+.maraseem-royal-dark {
+  --royal-bg-primary: #110E0B;
+  --royal-bg-elevated: #1A1612;
+  --royal-bg-card: #1E1914;
+  --royal-bg-input: #120F0C;
+  --royal-border-subtle: rgba(214, 181, 116, 0.28);
+  --royal-border-strong: rgba(214, 181, 116, 0.58);
+  --royal-text-primary: #F8F1E5;
+  --royal-text-secondary: #D6B574;
+  --royal-emerald-surface: #123D32;
+  background-color: var(--royal-bg-primary) !important;
+  color: var(--royal-text-primary) !important;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Border & Divider Harmony in Dark Mode (excluding live invitation preview viewport) */
+.maraseem-royal-dark :not(.maraseem-live-preview-guard):not(.maraseem-live-preview-guard *) {
+  border-color: rgba(214, 181, 116, 0.28);
+}
+
+.maraseem-royal-dark .border-\[\#E9DDC9\]:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark .border-\[\#B9CCA0\]:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark .border-\[\#91A77D\]:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark .border-\[\#DCE8CB\]:not(.maraseem-live-preview-guard *) {
+  border-color: rgba(214, 181, 116, 0.35) !important;
+}
+
+.maraseem-royal-dark .divide-\[\#E9DDC9\]:not(.maraseem-live-preview-guard *) > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(214, 181, 116, 0.22) !important;
+}
+
+/* Surface Backgrounds in Dark Mode */
+.maraseem-royal-dark.bg-\[\#F8F1E5\],
+.maraseem-royal-dark.bg-\[\#F8F6EF\],
+.maraseem-royal-dark .bg-\[\#F8F1E5\]:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark .bg-\[\#F8F6EF\]:not(.maraseem-live-preview-guard *) {
+  background-color: #16130F !important;
+  color: #F8F1E5 !important;
+}
+
+.maraseem-royal-dark .bg-\[\#FFFDF8\]:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark .bg-\[\#FFFDF8\]\/95:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark .bg-\[\#FFFDF8\]\/80:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark .bg-\[\#FFFFFF\]:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark .bg-white:not(.maraseem-live-preview-guard *) {
+  background-color: #1E1914 !important;
+  color: #F8F1E5 !important;
+}
+
+/* Royal Emerald & Gold Accents in Dashboard & Editor Cards */
+.maraseem-royal-dark .bg-\[\#DCE8CB\]:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark .bg-\[\#EEF4E6\]:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark .bg-\[\#B9CCA0\]:not(.maraseem-live-preview-guard *) {
+  background-color: #123D32 !important;
+  color: #D6B574 !important;
+  border-color: rgba(214, 181, 116, 0.55) !important;
+}
+
+.maraseem-royal-dark tr.hover\:bg-\[\#F8F6EF\]:hover:not(.maraseem-live-preview-guard *) {
+  background-color: rgba(18, 61, 50, 0.28) !important;
+}
+
+/* Typography in Dark Mode */
+.maraseem-royal-dark .text-\[\#17130F\]:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark .text-\[\#566B49\]:not(.maraseem-live-preview-guard *) {
+  color: #F8F1E5 !important;
+}
+
+.maraseem-royal-dark .text-\[\#5C5346\]:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark .text-\[\#566B49\]\/80:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark .text-\[\#566B49\]\/85:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark .text-\[\#566B49\]\/90:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark .text-\[\#566B49\]\/75:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark .text-\[\#566B49\]\/70:not(.maraseem-live-preview-guard *) {
+  color: #D6B574 !important;
+  opacity: 0.9;
+}
+
+.maraseem-royal-dark .text-\[\#A98445\]:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark .text-\[\#91A77D\]:not(.maraseem-live-preview-guard *) {
+  color: #D6B574 !important;
+}
+
+.maraseem-royal-dark .text-rose-700:not(.maraseem-live-preview-guard *) {
+  color: #FDA4AF !important;
+}
+
+.maraseem-royal-dark .text-amber-800:not(.maraseem-live-preview-guard *) {
+  color: #FDE68A !important;
+}
+
+/* Inputs, Selects, and Textareas in Editor & Dashboard Dark Mode */
+.maraseem-royal-dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark select:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark textarea:not(.maraseem-live-preview-guard *) {
+  background-color: #120F0C !important;
+  color: #F8F1E5 !important;
+  border-color: rgba(214, 181, 116, 0.42) !important;
+}
+
+.maraseem-royal-dark input:not(.maraseem-live-preview-guard *)::placeholder,
+.maraseem-royal-dark textarea:not(.maraseem-live-preview-guard *)::placeholder {
+  color: rgba(214, 181, 116, 0.5) !important;
+}
+
+.maraseem-royal-dark input:focus:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark select:focus:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark textarea:focus:not(.maraseem-live-preview-guard *) {
+  border-color: #D6B574 !important;
+  box-shadow: 0 0 0 2px rgba(18, 61, 50, 0.65) !important;
+}
+
+/* Primary Buttons in Dark Mode */
+.maraseem-royal-dark button.bg-\[\#17130F\]:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark button.bg-\[\#566B49\]:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark button.bg-\[\#B9CCA0\]:not(.maraseem-live-preview-guard *) {
+  background-color: #123D32 !important;
+  color: #D6B574 !important;
+  border-color: #D6B574 !important;
+}
+
+.maraseem-royal-dark button.bg-\[\#17130F\]:hover:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark button.bg-\[\#566B49\]:hover:not(.maraseem-live-preview-guard *),
+.maraseem-royal-dark button.bg-\[\#B9CCA0\]:hover:not(.maraseem-live-preview-guard *) {
+  background-color: #184F41 !important;
+  color: #FFFDF8 !important;
+}
+
+/* Ensure live preview is 100% isolated from Dark Mode overrides */
+.maraseem-live-preview-guard {
+  color-scheme: normal;
+  isolation: isolate;
+}
+
+

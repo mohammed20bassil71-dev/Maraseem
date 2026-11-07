@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Allow: /invitations
+Allow: /birthday
+Allow: /business
+Allow: /login
+Allow: /pricing
+Allow: /partners
+
+Sitemap: https://www.maraseem.com/sitemap.xml

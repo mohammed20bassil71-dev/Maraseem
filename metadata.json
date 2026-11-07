@@ -1,0 +1,6 @@
+{
+  "name": "مراسيم | Maraseem - منصة الدعوات الإلكترونية التفاعلية",
+  "description": "منصة عربية عالمية رائدة لتصميم وإنشاء الدعوات الرقمية التفاعلية الفاخرة للخطوبة والزواج وليالي الحنة والتخرج وأعياد الميلاد والمناسبات.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>مراسيم | Maraseem – منصة الدعوات الإلكترونية الملكية ثلاثية الأبعاد</title>
+
+  <!-- Open Graph / WhatsApp & Telegram Preview Meta Tags -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="مراسيم | دعوة إلكترونية ملكية ثلاثية الأبعاد ✨" />
+  <meta property="og:description" content="يسرنا دعوتكم لمشاركتنا فرحتنا.. اضغط لفتح الدعوة الملكية التفاعلية 3D" />
+  <meta property="og:url" content="https://maraseem.ai.studio/" />
+  <meta name="theme-color" content="#17130F" />
+
+  <!-- 1. Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- 2. GSAP & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- 3. Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- 4. Canvas-Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <!-- 5. Google Fonts: Amiri, Cairo, Aref Ruqaa -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            champagne: '#D6B574',
+            antiqueGold: '#A98445',
+            ivory: '#F8F1E5',
+            pearl: '#FFFDF8',
+            emeraldRoyal: '#123D32',
+            royalBlack: '#17130F',
+            royalNavy: '#0B1938',
+            blush: '#EBCBC1'
+          },
+          fontFamily: {
+            amiri: ['Amiri', 'serif'],
+            cairo: ['Cairo', 'sans-serif'],
+            ruqaa: ['Aref Ruqaa', 'serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #F8F1E5;
+      color: #17130F;
+      overflow-x: hidden;
+    }
+    .font-amiri { font-family: 'Amiri', serif; }
+    .font-ruqaa { font-family: 'Aref Ruqaa', serif; }
+    .font-cairo { font-family: 'Cairo', sans-serif; }
+
+    /* Glassmorphism & Luxury Surfaces */
+    .royal-glass {
+      background: rgba(255, 253, 248, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(214, 181, 116, 0.45);
+    }
+    .royal-dark-glass {
+      background: rgba(23, 19, 15, 0.84);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(214, 181, 116, 0.45);
+    }
+    .gold-border-glow {
+      box-shadow: 0 12px 36px -8px rgba(169, 132, 69, 0.25), inset 0 0 18px rgba(214, 181, 116, 0.15);
+    }
+    .paper-texture {
+      background-color: #FFFDF8;
+      background-image: radial-gradient(rgba(214, 181, 116, 0.14) 1px, transparent 0);
+      background-size: 22px 22px;
+    }
+    @keyframes pulseHint {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.92; }
+      50% { transform: translateY(-5px) scale(1.03); opacity: 1; }
+    }
+    .animate-hint {
+      animation: pulseHint 2.4s infinite ease-in-out;
+    }
+    @keyframes soundWave {
+      0%, 100% { height: 4px; }
+      50% { height: 14px; }
+    }
+    .wave-bar {
+      width: 2.5px;
+      background-color: #D6B574;
+      border-radius: 99px;
+      animation: soundWave 0.9s infinite ease-in-out;
+    }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #F8F1E5; }
+    ::-webkit-scrollbar-thumb { background: #D6B574; border-radius: 9999px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-champagne/30 selection:text-royalBlack">
+
+  <!-- Background Ambient Three.js Canvas -->
+  <canvas id="bg-particles-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-45"></canvas>
+
+  <!-- Floating Global Audio Control Button (Appears when MP3 is active) -->
+  <button id="floating-audio-btn" onclick="toggleGlobalAudio()" title="كتم / تشغيل الموسيقى"
+    class="fixed bottom-5 left-5 z-[60] hidden items-center gap-2 px-4 py-2.5 rounded-full royal-dark-glass text-champagne shadow-2xl border border-champagne hover:scale-105 transition-all cursor-pointer">
+    <div id="audio-waves-icon" class="flex items-end gap-0.5 h-3.5">
+      <span class="wave-bar" style="animation-delay: 0s;"></span>
+      <span class="wave-bar" style="animation-delay: 0.2s;"></span>
+      <span class="wave-bar" style="animation-delay: 0.4s;"></span>
+    </div>
+    <span id="audio-btn-label" class="text-xs font-bold">الموسيقى تعمل</span>
+  </button>
+
+  <!-- 1. ROYAL HEADER -->
+  <header id="main-app-header" class="sticky top-0 z-40 royal-glass shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      <button onclick="switchTab('home')" class="flex items-center gap-3 text-right group cursor-pointer">
+        <div class="w-11 h-11 rounded-2xl bg-royalBlack border border-champagne flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+          <span class="font-amiri text-2xl font-bold text-champagne">م</span>
+        </div>
+        <div>
+          <div class="text-2xl font-bold font-amiri text-royalBlack tracking-wide">مراسيم</div>
+          <div class="text-[11px] text-antiqueGold font-semibold -mt-1">لكل دعوة حكاية • Royal 3D</div>
+        </div>
+      </button>
+
+      <nav class="hidden md:flex items-center gap-2 text-xs font-bold">
+        <button onclick="switchTab('home')" id="nav-home" class="px-4 py-2.5 rounded-xl bg-royalBlack text-champagne transition-all cursor-pointer">الرئيسية</button>
+        <button onclick="switchTab('templates')" id="nav-templates" class="px-4 py-2.5 rounded-xl hover:bg-ivory text-royalBlack/80 transition-all cursor-pointer">استكشف القوالب</button>
+        <button onclick="switchTab('graduation')" id="nav-graduation" class="px-4 py-2.5 rounded-xl hover:bg-ivory text-royalBlack/80 transition-all cursor-pointer">مجموعة التخرج 3D</button>
+        <button onclick="switchTab('editor')" id="nav-editor" class="px-4 py-2.5 rounded-xl hover:bg-ivory text-royalBlack/80 transition-all cursor-pointer">محرر الدعوات التفاعلي</button>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <button onclick="openEditorWithTemplate('tpl-grad-celebration')" class="px-4 py-2.5 rounded-xl bg-royalBlack hover:bg-emeraldRoyal text-champagne border border-champagne/60 font-bold text-xs shadow-sm transition-all cursor-pointer">
+          ✨ أنشئ دعوتك 3D
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Quick Bar -->
+    <div class="flex md:hidden items-center justify-around border-t border-champagne/30 bg-pearl/95 py-2 px-2 text-[11px] font-bold">
+      <button onclick="switchTab('home')" class="px-3 py-1.5 rounded-lg text-royalBlack">الرئيسية</button>
+      <button onclick="switchTab('templates')" class="px-3 py-1.5 rounded-lg text-royalBlack">القوالب</button>
+      <button onclick="switchTab('graduation')" class="px-3 py-1.5 rounded-lg text-antiqueGold">مجموعة التخرج</button>
+      <button onclick="switchTab('editor')" class="px-3 py-1.5 rounded-lg text-royalBlack">المحرر 3D</button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main id="main-app-container" class="relative z-10 flex-1">
+
+    <!-- ==================== VIEW 1: HOME ==================== -->
+    <section id="view-home" class="pb-20">
+      <div class="relative overflow-hidden py-16 sm:py-24 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+          <h1 class="font-amiri text-4xl sm:text-6xl font-bold text-royalBlack leading-tight mb-5">
+            مراسيم – لكل دعوة حكاية
+          </h1>
+          <p class="text-sm sm:text-lg text-royalBlack/75 max-w-2xl mx-auto leading-relaxed mb-8 font-medium">
+            منصة الدعوات الإلكترونية الملكية بتجارب افتتاح ثلاثية الأبعاد وموسيقى خاصة؛ حيث يتفاعل ضيوفك مباشرة مع الظرف الملكي، الخاتم الألماسي، قبعة التخرج، أو الفانوس الشرقي.
+          </p>
+          <div class="flex flex-wrap items-center justify-center gap-3.5">
+            <button onclick="switchTab('templates')" class="px-8 py-4 rounded-2xl bg-royalBlack hover:bg-emeraldRoyal text-champagne border border-champagne font-bold text-sm shadow-lg transition-all cursor-pointer">
+              اكتشف الدعوات
+            </button>
+            <button onclick="switchTab('graduation')" class="px-7 py-4 rounded-2xl bg-pearl hover:bg-ivory text-royalBlack border border-champagne/60 font-bold text-sm shadow-sm transition-all cursor-pointer">
+              🎓 مجموعة التخرج الملكية 3D
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+        <div class="flex flex-wrap items-center justify-center gap-2.5" id="home-category-pills"></div>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div id="home-templates-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7"></div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 2: ALL TEMPLATES ==================== -->
+    <section id="view-templates" class="hidden py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <h2 class="font-amiri text-3xl sm:text-4xl font-bold text-royalBlack mb-3">مكتبة القوالب الملكية ثلاثية الأبعاد</h2>
+        <p class="text-xs sm:text-sm text-royalBlack/70">اختر المناسبة واستعرض القوالب التفاعلية، كل قالب يفتتح بمجسم ثلاثي الأبعاد قابل للنقر المباشر مع موسيقى خلفية.</p>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-9" id="gallery-category-pills"></div>
+      <div id="gallery-templates-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7"></div>
+    </section>
+
+    <!-- ==================== VIEW 3: GRADUATION COLLECTION ==================== -->
+    <section id="view-graduation" class="hidden py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="rounded-3xl bg-gradient-to-br from-[#0B1938] via-[#102347] to-[#17130F] p-8 sm:p-12 border border-champagne/50 text-center text-pearl mb-12 shadow-2xl">
+        <span class="inline-block px-4 py-1 rounded-full bg-champagne/20 border border-champagne/50 text-champagne text-xs font-bold mb-4">
+          GRADUATION ROYAL 3D COLLECTION
+        </span>
+        <h2 class="font-amiri text-3xl sm:text-5xl font-bold text-champagne mb-4">
+          مجموعة التخرج ومشاريع التخرج ثلاثية الأبعاد
+        </h2>
+        <p class="text-xs sm:text-base text-ivory/85 max-w-2xl mx-auto leading-relaxed">
+          قوالب احتفالية متكاملة بهوية الكحلي الملكي والذهبي الشامبين، يُفتتح كل منها بالنقر المباشر على المجسم ثلاثي الأبعاد مع تخصيص مجسم التخصص العلمي.
+        </p>
+      </div>
+
+      <div id="graduation-collection-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+    </section>
+
+    <!-- ==================== VIEW 4: CUSTOMIZATION EDITOR & LIVE 3D PREVIEW ==================== -->
+    <section id="view-editor" class="hidden py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+        <!-- Editor Controls Column -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="royal-glass rounded-3xl p-6 sm:p-8 gold-border-glow">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-champagne/30 pb-4 mb-6">
+              <div>
+                <h2 class="font-amiri text-2xl font-bold text-royalBlack">استوديو تخصيص الدعوة الملكية</h2>
+                <p class="text-xs text-antiqueGold font-semibold">عدّل البيانات، الموسيقى، وتجربة الافتتاح 3D مع معاينة فورية</p>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                <button onclick="copyShareableGuestLink(this)" class="px-4 py-2.5 rounded-xl bg-emeraldRoyal hover:bg-royalBlack text-champagne border border-champagne font-bold text-xs shadow transition-all cursor-pointer">
+                  🔗 نسخ رابط الدعوة للضيوف
+                </button>
+                <button onclick="launchFullScreenExperience()" class="px-4 py-2.5 rounded-xl bg-royalBlack text-champagne border border-champagne font-bold text-xs shadow hover:bg-antiqueGold hover:text-royalBlack transition-all cursor-pointer">
+                  📱 ملء الشاشة
+                </button>
+              </div>
+            </div>
+
+            <!-- 1. Occasion Category -->
+            <div class="mb-6">
+              <label class="block text-xs font-bold text-royalBlack mb-2">1. نوع المناسبة (Occasion Category)</label>
+              <select id="edit-category" onchange="handleEditorCategoryChange(this.value)" class="w-full rounded-xl bg-pearl border border-champagne/60 px-4 py-3 text-sm font-bold text-royalBlack focus:outline-none focus:border-royalBlack">
+                <option value="wedding">دعوات الزفاف (Royal Wedding)</option>
+                <option value="engagement">دعوات الخطوبة (Engagement)</option>
+                <option value="henna">دعوات الحنّة (Henna Night)</option>
+                <option value="birthday">أعياد الميلاد (Birthday)</option>
+                <option value="graduation">حفلات التخرج (Graduation)</option>
+                <option value="graduation_project">مناقشة مشاريع التخرج (Project Graduation)</option>
+              </select>
+            </div>
+
+            <!-- 2. Opening Experience -->
+            <div class="mb-6 p-4 rounded-2xl bg-ivory/80 border border-champagne/50">
+              <div class="flex items-center justify-between mb-2">
+                <label class="text-xs font-bold text-royalBlack">2. تجربة الافتتاح ثلاثية الأبعاد (Opening Experience)</label>
+                <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-royalBlack text-champagne font-bold">تفاعلي 3D</span>
+              </div>
+              <p class="text-[11px] text-royalBlack/70 mb-3">
+                يتغير المجسم ثلاثي الأبعاد فوراً دون المساس ببيانات الدعوة أو الموسيقى المضافة.
+              </p>
+              <div id="editor-opening-modes" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+            </div>
+
+            <!-- 3. Audio & External MP3 Section -->
+            <div class="mb-6 p-4 rounded-2xl bg-gradient-to-l from-ivory to-pearl border border-champagne/60 space-y-3">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-bold text-royalBlack flex items-center gap-1.5">
+                  <span>🎵 3. الموسيقى وملفات MP3 الخارجية</span>
+                </label>
+                <button type="button" onclick="testEditorAudioPreview()" class="px-3 py-1 rounded-lg bg-royalBlack text-champagne text-[11px] font-bold hover:bg-emeraldRoyal transition-all cursor-pointer">
+                  ▶️ تجربة الصوت الآن
+                </button>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[11px] font-bold text-antiqueGold mb-1">موسيقى جاهزة حسب المناسبة:</label>
+                  <select id="edit-audio-preset" onchange="handleAudioPresetChange(this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3 py-2 text-xs font-bold text-royalBlack">
+                    <option value="">-- اختر مقطوعة جاهزة أو ضع رابطاً خاصاً --</option>
+                    <option value="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3">بيانو رومانسي هادئ (زفاف / خطوبة)</option>
+                    <option value="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3">أوركسترا الفخر الملكية (تخرج / احتفال)</option>
+                    <option value="https://cdn.pixabay.com/download/audio/2022/10/25/audio_946bc6eb4c.mp3">أجواء شرقية دافئة (ليلة الحنّة)</option>
+                    <option value="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3">موسيقى احتفالية مبهجة (عيد ميلاد)</option>
+                    <option value="none">بدون موسيقى خلفية (مؤثر اللمس فقط)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-bold text-antiqueGold mb-1">رابط MP3 خارجي مباشر (URL):</label>
+                  <input id="edit-audio-url" type="url" placeholder="https://example.com/song.mp3 أو ./music.mp3"
+                    oninput="syncEditorField('audioUrl', this.value)"
+                    class="w-full rounded-xl bg-pearl border border-champagne/50 px-3 py-2 text-xs text-left" dir="ltr" />
+                </div>
+              </div>
+
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-champagne/30">
+                <label class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-royalBlack hover:bg-emeraldRoyal text-champagne text-xs font-bold cursor-pointer transition-all">
+                  <span>📂 رفع ملف MP3 من جهازك (للمعاينة الفورية)</span>
+                  <input type="file" accept="audio/mp3,audio/*" class="hidden" onchange="handleLocalMp3Upload(this)" />
+                </label>
+                <span id="uploaded-mp3-name" class="text-[11px] text-antiqueGold font-bold truncate max-w-[220px]">
+                  يعمل تلقائياً عند نقر الضيف على مجسم 3D
+                </span>
+              </div>
+            </div>
+
+            <!-- 4. Dynamic Fields by Category -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold text-royalBlack mb-1.5">عنوان الدعوة الرئيسي</label>
+                <input id="edit-title" type="text" oninput="syncEditorField('title', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm font-semibold" />
+              </div>
+
+              <div>
+                <label id="label-primary-name" class="block text-xs font-bold text-royalBlack mb-1.5">الاسم الأول / اسم الخريج</label>
+                <input id="edit-primary-name" type="text" oninput="syncEditorField('primaryName', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm font-semibold" />
+              </div>
+
+              <div id="wrap-secondary-name">
+                <label id="label-secondary-name" class="block text-xs font-bold text-royalBlack mb-1.5">الاسم الثاني / اللقب</label>
+                <input id="edit-secondary-name" type="text" oninput="syncEditorField('secondaryName', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm font-semibold" />
+              </div>
+
+              <!-- Graduation & Project Specific Fields -->
+              <div id="grad-fields-container" class="sm:col-span-2 hidden grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-champagne/30">
+                <div>
+                  <label class="block text-xs font-bold text-royalBlack mb-1.5">اسم الجامعة</label>
+                  <input id="edit-university" type="text" oninput="syncEditorField('university', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm" placeholder="جامعة بغداد" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-royalBlack mb-1.5">الكلية والقسم</label>
+                  <input id="edit-college" type="text" oninput="syncEditorField('college', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm" placeholder="كلية الهندسة – قسم العمارة" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-royalBlack mb-1.5">الدرجة العلمية / التقدير</label>
+                  <input id="edit-degree" type="text" oninput="syncEditorField('degree', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm" placeholder="بكالوريوس بمرتبة الشرف" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-royalBlack mb-1.5">التخصص الأكاديمي (يغير المجسم العلمي 3D)</label>
+                  <select id="edit-major" onchange="handleMajorChange(this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm font-bold">
+                    <option value="engineering">الهندسة والعمارة (تروس هندسية مذهبة 3D)</option>
+                    <option value="medicine">الطب والمختبرات (حلزون DNA مزدوج 3D)</option>
+                    <option value="computer">علوم الحاسوب والذكاء الاصطناعي (نواة عصبية 3D)</option>
+                    <option value="business">إدارة الأعمال والاقتصاد (أعمدة نمو 3D)</option>
+                  </select>
+                </div>
+
+                <!-- Optional Graduation Quotes -->
+                <div class="sm:col-span-2">
+                  <label class="block text-xs font-bold text-antiqueGold mb-2">عبارات تخرج جاهزة (اضغط للاختيار الفوري):</label>
+                  <div class="flex flex-wrap gap-2">
+                    <button type="button" onclick="selectQuickQuote('رحلة تعب.. ونهاية فخر.')" class="px-3 py-1.5 rounded-xl bg-ivory hover:bg-royalBlack hover:text-champagne border border-champagne/50 text-xs font-bold transition-all cursor-pointer">«رحلة تعب.. ونهاية فخر.»</button>
+                    <button type="button" onclick="selectQuickQuote('اليوم نحصد ما زرعناه بالأمس.')" class="px-3 py-1.5 rounded-xl bg-ivory hover:bg-royalBlack hover:text-champagne border border-champagne/50 text-xs font-bold transition-all cursor-pointer">«اليوم نحصد ما زرعناه بالأمس.»</button>
+                    <button type="button" onclick="selectQuickQuote('بفضل الله تحقق الحلم.')" class="px-3 py-1.5 rounded-xl bg-ivory hover:bg-royalBlack hover:text-champagne border border-champagne/50 text-xs font-bold transition-all cursor-pointer">«بفضل الله تحقق الحلم.»</button>
+                    <button type="button" onclick="selectQuickQuote('خطوة جديدة نحو المستقبل.')" class="px-3 py-1.5 rounded-xl bg-ivory hover:bg-royalBlack hover:text-champagne border border-champagne/50 text-xs font-bold transition-all cursor-pointer">«خطوة جديدة نحو المستقبل.»</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quote & Invitation Body -->
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold text-royalBlack mb-1.5">العبارة الترحيبية / الاقتباس</label>
+                <input id="edit-quote" type="text" oninput="syncEditorField('quote', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm font-amiri" />
+              </div>
+
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold text-royalBlack mb-1.5">نص الدعوة</label>
+                <textarea id="edit-body" rows="2" oninput="syncEditorField('body', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2 text-sm"></textarea>
+              </div>
+
+              <!-- Date, Time, Venue, Map -->
+              <div>
+                <label class="block text-xs font-bold text-royalBlack mb-1.5">تاريخ المناسبة (يفعّل العداد التنازلي)</label>
+                <input id="edit-date" type="date" oninput="syncEditorField('date', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-royalBlack mb-1.5">الوقت</label>
+                <input id="edit-time" type="text" oninput="syncEditorField('time', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-royalBlack mb-1.5">مكان الحفل / القاعة</label>
+                <input id="edit-venue" type="text" oninput="syncEditorField('venue', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-royalBlack mb-1.5">المدينة والعنوان</label>
+                <input id="edit-city" type="text" oninput="syncEditorField('city', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2.5 text-sm" />
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold text-royalBlack mb-1.5">رابط Google Maps مخصص (اختياري - أو يتم توليده تلقائياً من اسم القاعة)</label>
+                <input id="edit-map-url" type="url" placeholder="https://maps.app.goo.gl/..." oninput="syncEditorField('mapUrl', this.value)" class="w-full rounded-xl bg-pearl border border-champagne/50 px-3.5 py-2 text-xs text-left" dir="ltr" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Mobile 3D Preview Column -->
+        <div class="lg:col-span-5 sticky top-24">
+          <div class="mx-auto max-w-[395px] rounded-[42px] p-3 bg-royalBlack border-4 border-champagne/70 shadow-2xl">
+            <div class="relative w-full h-[710px] rounded-[32px] overflow-hidden bg-[#0E131F] flex flex-col">
+              <div id="phone-preview-mount" class="relative w-full h-full"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== STANDALONE TEMPLATE PREVIEW / GUEST MODAL ==================== -->
+  <div id="template-preview-modal" class="fixed inset-0 z-50 hidden bg-royalBlack/95 backdrop-blur-xl flex flex-col">
+    <div id="modal-top-bar" class="relative z-30 flex items-center justify-between px-4 sm:px-8 py-3.5 bg-royalBlack/85 border-b border-champagne/30 text-pearl">
+      <div class="flex items-center gap-3">
+        <button onclick="closeStandaloneModal()" class="px-3.5 py-1.5 rounded-xl bg-pearl/10 hover:bg-pearl/20 border border-champagne/40 text-xs font-bold text-champagne cursor-pointer">
+          ✕ إغلاق المعاينة
+        </button>
+        <span id="modal-template-title" class="font-amiri text-lg font-bold text-champagne truncate"></span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="reset3DStage()" class="px-3.5 py-1.5 rounded-xl bg-pearl/10 hover:bg-pearl/20 border border-champagne/40 text-xs font-bold text-pearl cursor-pointer">
+          🔄 إعادة حركة 3D
+        </button>
+        <button onclick="customizeCurrentModalTemplate()" class="px-4 py-2 rounded-xl bg-champagne text-royalBlack font-bold text-xs shadow hover:bg-antiqueGold hover:text-pearl transition-all cursor-pointer">
+          ✨ تخصيص هذا القالب
+        </button>
+      </div>
+    </div>
+
+    <div id="fullscreen-stage-mount" class="relative flex-1 w-full h-full overflow-y-auto"></div>
+  </div>
+
+  <!-- ==================== COMPLETE INTERACTIVE 3D ENGINE & AUDIO SCRIPT ==================== -->
+  <script>
+    const OCCASION_LABELS = {
+      all: 'جميع المناسبات',
+      wedding: 'دعوات الزفاف',
+      engagement: 'دعوات الخطوبة',
+      henna: 'دعوات الحنّة',
+      birthday: 'أعياد الميلاد',
+      graduation: 'حفلات التخرج',
+      graduation_project: 'مشاريع التخرج'
+    };
+
+    const CATEGORY_SVGS = {
+      graduation: `<svg class="w-8 h-8 text-champagne" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/><path d="M5 13.18v4L12 21l7-3.82v-4"/></svg>`,
+      graduation_project: `<svg class="w-8 h-8 text-champagne" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M2 17h20l2 4H0l2-4z"/><circle cx="12" cy="10" r="3"/></svg>`,
+      wedding: `<svg class="w-8 h-8 text-champagne" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 7l10 7 10-7"/></svg>`,
+      engagement: `<svg class="w-8 h-8 text-champagne" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="15" r="6"/><path d="M9 6l3-3 3 3-3 3-3-3z"/></svg>`,
+      henna: `<svg class="w-8 h-8 text-champagne" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 2h6l2 4H7l2-4z"/><path d="M7 6l-2 9 7 7 7-7-2-9H7z"/><circle cx="12" cy="12" r="2"/></svg>`,
+      birthday: `<svg class="w-8 h-8 text-champagne" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></svg>`
+    };
+
+    const OPENING_EXPERIENCES = {
+      envelope_3d: {
+        id: 'envelope_3d',
+        categories: ['wedding'],
+        titleAr: 'الظرف الملكي والختم الشمعي 3D',
+        hintAr: 'اضغط على الظرف الملكي والختم الشمعي لفتح الدعوة وتشغيل الموسيقى',
+        palette: { bg: '#0E2921', gold: '#D6B574', accent: '#123D32' }
+      },
+      curtain_3d: {
+        id: 'curtain_3d',
+        categories: ['wedding'],
+        titleAr: 'ستائر المسرح الملكي 3D',
+        hintAr: 'اضغط على الستائر المخملية لفتح المسرح والدعوة',
+        palette: { bg: '#2B0912', gold: '#D6B574', accent: '#5E1124' }
+      },
+      popup_book_3d: {
+        id: 'popup_book_3d',
+        categories: ['wedding'],
+        titleAr: 'كتاب القصر البارز 3D Pop-Up',
+        hintAr: 'اضغط على غلاف الكتاب الملكي لفتح صفحات القصر',
+        palette: { bg: '#17130F', gold: '#D6B574', accent: '#A98445' }
+      },
+      wedding_carriage_3d: {
+        id: 'wedding_carriage_3d',
+        categories: ['wedding'],
+        titleAr: 'العربة الملكية المذهبة 3D',
+        hintAr: 'اضغط على العربة الملكية لفتح أبوابها وإظهار الدعوة',
+        palette: { bg: '#132A23', gold: '#D6B574', accent: '#123D32' }
+      },
+      engagement_ring_3d: {
+        id: 'engagement_ring_3d',
+        categories: ['engagement'],
+        titleAr: 'خاتم الخطوبة الألماسي 3D',
+        hintAr: 'اضغط على خاتم الخطوبة الألماسي لفتح الدعوة',
+        palette: { bg: '#26171C', gold: '#D6B574', accent: '#EBCBC1' }
+      },
+      engagement_jewelry_box_3d: {
+        id: 'engagement_jewelry_box_3d',
+        categories: ['engagement'],
+        titleAr: 'علبة المجوهرات المخملية 3D',
+        hintAr: 'اضغط على علبة المجوهرات المخملية لفتحها',
+        palette: { bg: '#231419', gold: '#D6B574', accent: '#D8A7B1' }
+      },
+      engagement_rose_3d: {
+        id: 'engagement_rose_3d',
+        categories: ['engagement'],
+        titleAr: 'الوردة الملكية المتفتحة 3D',
+        hintAr: 'اضغط على الوردة الملكية لتتفتح وتكشف الدعوة',
+        palette: { bg: '#29151B', gold: '#D6B574', accent: '#EBCBC1' }
+      },
+      henna_lantern_3d: {
+        id: 'henna_lantern_3d',
+        categories: ['henna'],
+        titleAr: 'الفانوس الشرقي المضيء 3D',
+        hintAr: 'اضغط على الفانوس الشرقي المذهب لإضاءة الدعوة',
+        palette: { bg: '#2E0B13', gold: '#D6B574', accent: '#123D32' }
+      },
+      henna_box_3d: {
+        id: 'henna_box_3d',
+        categories: ['henna'],
+        titleAr: 'صندوق الحنّة المزخرف 3D',
+        hintAr: 'اضغط على صندوق الحنّة الملكي لفتحه',
+        palette: { bg: '#102E26', gold: '#D6B574', accent: '#6B1323' }
+      },
+      henna_mabkhara_3d: {
+        id: 'henna_mabkhara_3d',
+        categories: ['henna'],
+        titleAr: 'المبخرة الملكية المذهبة 3D',
+        hintAr: 'اضغط على المبخرة الملكية لإطلاق الطيب وفتح الدعوة',
+        palette: { bg: '#28120E', gold: '#D6B574', accent: '#A98445' }
+      },
+      birthday_cake_3d: {
+        id: 'birthday_cake_3d',
+        categories: ['birthday'],
+        titleAr: 'كعكة الميلاد الفاخرة 3D',
+        hintAr: 'اضغط على كعكة الميلاد والشموع للاحتفال وفتح الدعوة',
+        palette: { bg: '#24182E', gold: '#D6B574', accent: '#EBCBC1' }
+      },
+      birthday_gift_box_3d: {
+        id: 'birthday_gift_box_3d',
+        categories: ['birthday'],
+        titleAr: 'صندوق الهدايا الاحتفالي 3D',
+        hintAr: 'اضغط على صندوق الهدية المذهب لفك الشريط وفتح الدعوة',
+        palette: { bg: '#1B2038', gold: '#D6B574', accent: '#C8B6FF' }
+      },
+      graduation_cap_3d: {
+        id: 'graduation_cap_3d',
+        categories: ['graduation'],
+        titleAr: 'قبعة التخرج الملكية 3D (Graduation Celebration)',
+        hintAr: 'اضغط على قبعة التخرج لترتفع وتطلق قصاصات الاحتفال',
+        palette: { bg: '#0B1938', gold: '#D6B574', accent: '#123D32' }
+      },
+      graduation_diploma_3d: {
+        id: 'graduation_diploma_3d',
+        categories: ['graduation'],
+        titleAr: 'الوثيقة الذهبية وإكليل الغار 3D (Golden Diploma)',
+        hintAr: 'اضغط على وثيقة التخرج الذهبية لفك الشريط وفتح الدعوة',
+        palette: { bg: '#09152E', gold: '#D6B574', accent: '#A98445' }
+      },
+      graduation_night_fireworks_3d: {
+        id: 'graduation_night_fireworks_3d',
+        categories: ['graduation'],
+        titleAr: 'ليلة التخرج وصرح الجامعة 3D (Graduation Night)',
+        hintAr: 'اضغط على قبعة التخرج أمام الجامعة لإطلاق الألعاب النارية الذهبية',
+        palette: { bg: '#060F24', gold: '#D6B574', accent: '#1E3A8A' }
+      },
+      graduation_popup_book_3d: {
+        id: 'graduation_popup_book_3d',
+        categories: ['graduation'],
+        titleAr: 'كتاب التخرج البارز 3D (Graduation Pop-Up Book)',
+        hintAr: 'اضغط على كتاب التخرج الملكي لفتح مجسم الجامعة والوثيقة',
+        palette: { bg: '#0D1B3A', gold: '#D6B574', accent: '#A98445' }
+      },
+      project_laptop_3d: {
+        id: 'project_laptop_3d',
+        categories: ['graduation_project'],
+        titleAr: 'الحاسوب التفاعلي ومجسم التخصص 3D',
+        hintAr: 'اضغط على منصة المشروع التفاعلية لفتح تفاصيل المناقشة',
+        palette: { bg: '#0B1938', gold: '#D6B574', accent: '#38BDF8' }
+      },
+      project_dossier_3d: {
+        id: 'project_dossier_3d',
+        categories: ['graduation_project'],
+        titleAr: 'ملف المشروع الأكاديمي المذهب 3D',
+        hintAr: 'اضغط على ملف البحث الأكاديمي لفتح الدعوة',
+        palette: { bg: '#0F172A', gold: '#D6B574', accent: '#94A3B8' }
+      }
+    };
+
+    const TEMPLATES = [
+      {
+        id: 'tpl-grad-celebration',
+        name: 'احتفالية التخرج الملكية – Graduation Celebration',
+        category: 'graduation',
+        themeColor: '#0B1938',
+        openingMode: 'graduation_cap_3d',
+        badge: 'القالب الأول • Graduation Collection',
+        data: {
+          title: 'حفل تخرج دفعة التميز الملكية',
+          primaryName: 'المهندس عبدالله محمد السامرائي',
+          secondaryName: 'دفعة ٢٠٢٦',
+          university: 'جامعة بغداد',
+          college: 'كلية الهندسة – قسم هندسة العمارة',
+          degree: 'بكالوريوس هندسة معمارية بمرتبة الشرف الأولى',
+          major: 'engineering',
+          quote: '«رحلة تعب.. ونهاية فخر.»',
+          body: 'بقلوب يملؤها الفخر والامتنان، نتشرف بدعوتكم لمشاركتنا فرحة التخرج وتتويج سنوات الجد والاجتهاد.',
+          date: '2026-12-20',
+          time: '07:30 مساءً',
+          venue: 'القاعة الملكية الكبرى – فندق بابل روتانا',
+          city: 'بغداد – الجادرية',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3'
+        }
+      },
+      {
+        id: 'tpl-grad-diploma',
+        name: 'الوثيقة الذهبية الملكية – Golden Diploma',
+        category: 'graduation',
+        themeColor: '#09152E',
+        openingMode: 'graduation_diploma_3d',
+        badge: 'القالب الثاني • Graduation Collection',
+        data: {
+          title: 'حفل تخرج وتكريم الأوائل',
+          primaryName: 'الدكتورة نور الهدى التميمي',
+          secondaryName: 'دفعة الأمل ٢٠٢٦',
+          university: 'الجامعة المستنصرية',
+          college: 'كلية الطب العام',
+          degree: 'بكالوريوس طب وجراحة عامة',
+          major: 'medicine',
+          quote: '«اليوم نحصد ما زرعناه بالأمس.»',
+          body: 'يسعدنا تشريفكم لحضور حفل التخرج ومشاركتنا لحظات التتويج بالوثيقة الذهبية.',
+          date: '2026-12-25',
+          time: '08:00 مساءً',
+          venue: 'قاعة المؤتمرات الملكية',
+          city: 'بغداد – المنصور',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3'
+        }
+      },
+      {
+        id: 'tpl-grad-night',
+        name: 'ليلة التخرج المضيئة – Graduation Night',
+        category: 'graduation',
+        themeColor: '#060F24',
+        openingMode: 'graduation_night_fireworks_3d',
+        badge: 'القالب الثالث • Graduation Collection',
+        data: {
+          title: 'أمسية التخرج الملكية الكبرى',
+          primaryName: 'الخريج علي حسين الكاظمي',
+          secondaryName: 'مرتبة الشرف',
+          university: 'جامعة النهرين',
+          college: 'كلية هندسة المعلومات والذكاء الاصطناعي',
+          degree: 'بكالوريوس علوم الذكاء الاصطناعي',
+          major: 'computer',
+          quote: '«بفضل الله تحقق الحلم.»',
+          body: 'تحت سماء مضيئة بالألعاب النارية الذهبية، ننتظركم لتكتمل فرحة التخرج بحضوركم الكريم.',
+          date: '2027-01-10',
+          time: '08:30 مساءً',
+          venue: 'حدائق القصر الملكي',
+          city: 'بغداد – الكرادة',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3'
+        }
+      },
+      {
+        id: 'tpl-grad-popup-book',
+        name: 'كتاب التخرج البارز – Graduation Pop-Up Book',
+        category: 'graduation',
+        themeColor: '#0D1B3A',
+        openingMode: 'graduation_popup_book_3d',
+        badge: 'القالب الرابع • Graduation Collection',
+        data: {
+          title: 'حكاية نجاح وتخرج ملكي',
+          primaryName: 'الخريجة مريم أحمد العاني',
+          secondaryName: 'دفعة ٢٠٢٦',
+          university: 'الجامعة الأمريكية',
+          college: 'كلية إدارة الأعمال الدولية',
+          degree: 'ماجستير إدارة أعمال تنفيذية MBA',
+          major: 'business',
+          quote: '«خطوة جديدة نحو المستقبل.»',
+          body: 'نطوي صفحة الدراسة ونفتح فصلاً جديداً من النجاح، ويسرنا حضوركم حفل تخرجنا المبارك.',
+          date: '2027-01-18',
+          time: '07:00 مساءً',
+          venue: 'قاعة ألف ليلة وليلة الملكية',
+          city: 'بغداد – الجادرية',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3'
+        }
+      },
+      {
+        id: 'tpl-project-defense',
+        name: 'مناقشة مشروع التخرج الذكي – 3D Innovation Defense',
+        category: 'graduation_project',
+        themeColor: '#0B1938',
+        openingMode: 'project_laptop_3d',
+        badge: 'مناقشة مشروع تخرج 3D',
+        data: {
+          title: 'دعوة حضور مناقشة مشروع التخرج',
+          primaryName: 'فريق الابتكار الهندسي والطبي',
+          secondaryName: 'إشراف أ.د. حيدر العبيدي',
+          university: 'جامعة التكنولوجيا',
+          college: 'قسم هندسة الحاسوب والأنظمة الذكية',
+          degree: 'مشروع تخرج لنيل درجة البكالوريوس',
+          major: 'medicine',
+          quote: '«خطوة جديدة نحو المستقبل.»',
+          body: 'نتشرف بدعوتكم لحضور العرض التقديمي ومناقشة مشروع تخرجنا واستعراض النموذج التفاعلي.',
+          date: '2026-12-15',
+          time: '10:30 صباحاً',
+          venue: 'قاعة الخوارزمي للمناقشات العلمية',
+          city: 'بغداد – الحرم الجامعي الرئيسي',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3'
+        }
+      },
+      {
+        id: 'tpl-wedding-envelope',
+        name: 'الظرف الملكي والختم الشمعي – Royal Envelope',
+        category: 'wedding',
+        themeColor: '#123D32',
+        openingMode: 'envelope_3d',
+        badge: 'دعوة زفاف ملكية 3D',
+        data: {
+          title: 'حفل زفاف ملكي مبارك',
+          primaryName: 'أحمد السامرائي',
+          secondaryName: 'سارة التميمي',
+          university: '',
+          college: '',
+          degree: '',
+          major: 'engineering',
+          quote: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا»',
+          body: 'تتعالى الأصوات وتمتزج العبارات وتتحرك الأنامل لتخط كلمات الترحيب بدعوتكم لحضور حفل زفافنا المبارك.',
+          date: '2026-12-28',
+          time: '08:00 مساءً',
+          venue: 'قاعة القصر الزمردي الملكي',
+          city: 'بغداد – الكرادة مريم',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3'
+        }
+      },
+      {
+        id: 'tpl-wedding-curtain',
+        name: 'أوبرا الستائر المخملية – Royal Velvet Theatre',
+        category: 'wedding',
+        themeColor: '#3A0A14',
+        openingMode: 'curtain_3d',
+        badge: 'مسرح ملكي 3D',
+        data: {
+          title: 'ليلة العمر الملكية',
+          primaryName: 'حيدر الموسوي',
+          secondaryName: 'زينب الهاشمي',
+          university: '',
+          college: '',
+          degree: '',
+          major: 'engineering',
+          quote: '«بارك الله لهما وبارك عليهما وجمع بينهما في خير»',
+          body: 'يسرنا دعوتكم لتكونوا شهوداً على أجمل فصول حكايتنا في ليلة زفافنا الملكية.',
+          date: '2027-01-14',
+          time: '08:30 مساءً',
+          venue: 'قاعة الأوبرا الملكية الكبرى',
+          city: 'بغداد – المنصور',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3'
+        }
+      },
+      {
+        id: 'tpl-engagement-ring',
+        name: 'خاتم الخطوبة الألماسي – Royal Diamond Ring',
+        category: 'engagement',
+        themeColor: '#2B161C',
+        openingMode: 'engagement_ring_3d',
+        badge: 'دعوة خطوبة 3D',
+        data: {
+          title: 'حفل خطوبة مبارك',
+          primaryName: 'عمر الدليمي',
+          secondaryName: 'لينا الربيعي',
+          university: '',
+          college: '',
+          degree: '',
+          major: 'engineering',
+          quote: '«حكاية حب تتوج بالوعد والوفاء»',
+          body: 'نتشرف بدعوتكم لمشاركتنا فرحة خطوبتنا السعيدة في أمسية ملكية مميزة.',
+          date: '2026-12-18',
+          time: '07:30 مساءً',
+          venue: 'قاعة اللؤلؤة البيضاء',
+          city: 'بغداد – الجادرية',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3'
+        }
+      },
+      {
+        id: 'tpl-henna-lantern',
+        name: 'ليلة الحنّة والفانوس المذهب – Oriental Henna',
+        category: 'henna',
+        themeColor: '#2E0B13',
+        openingMode: 'henna_lantern_3d',
+        badge: 'ليلة الحنّة 3D',
+        data: {
+          title: 'ليلة الحنّة الملكية',
+          primaryName: 'العروس فاطمة الزهراء',
+          secondaryName: 'آل الكيلاني',
+          university: '',
+          college: '',
+          degree: '',
+          major: 'engineering',
+          quote: '«ليلة من ألف ليلة وليلة بالذهب والعنبر»',
+          body: 'وسط أضواء الفوانيس الذهبية ونفحات العود، يسعدنا حضوركنّ ليلة الحنّة المباركة.',
+          date: '2026-12-22',
+          time: '07:00 مساءً',
+          venue: 'قاعة السندباد الملكية',
+          city: 'بغداد – المنصور',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/10/25/audio_946bc6eb4c.mp3'
+        }
+      },
+      {
+        id: 'tpl-birthday-cake',
+        name: 'احتفالية عيد الميلاد الملكي – Royal Birthday Cake',
+        category: 'birthday',
+        themeColor: '#24182E',
+        openingMode: 'birthday_cake_3d',
+        badge: 'عيد ميلاد 3D',
+        data: {
+          title: 'حفل عيد ميلاد سعيد',
+          primaryName: 'الأميرة جود السامرائي',
+          secondaryName: 'العام الخامس ✨',
+          university: '',
+          college: '',
+          degree: '',
+          major: 'engineering',
+          quote: '«كل عام وأنتِ بهجة القلوب ونور الأيام»',
+          body: 'ندعوكم لمشاركتنا إطفاء الشموع والاحتفال بعيد ميلاد أميرتنا الصغيرة.',
+          date: '2026-12-30',
+          time: '06:30 مساءً',
+          venue: 'قاعة الفرح الملكية',
+          city: 'بغداد – اليرموك',
+          mapUrl: '',
+          audioUrl: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3'
+        }
+      }
+    ];
+
+    let activeCategoryFilter = 'all';
+    let currentInvitation = JSON.parse(JSON.stringify(TEMPLATES[0]));
+    let activeThreeInstance = null;
+    let countdownInterval = null;
+
+    // ==================== DUAL AUDIO ENGINE (Web Audio API + External MP3) ====================
+    const bgAudioPlayer = new Audio();
+    bgAudioPlayer.loop = true;
+    bgAudioPlayer.preload = 'auto';
+    let isAudioMuted = false;
+
+    function playRoyalChimeAndMP3() {
+      // 1. Web Audio API Royal Harp Chime on 3D Touch
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
+        const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.11);
+          gain.gain.setValueAtTime(0.14, ctx.currentTime + idx * 0.11);
+          gain.gain.exponentialRampToValueAtTime(0.0008, ctx.currentTime + idx * 0.11 + 1.4);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + idx * 0.11);
+          osc.stop(ctx.currentTime + idx * 0.11 + 1.4);
+        });
+      } catch (e) {}
+
+      // 2. External MP3 Background Track
+      const mp3Url = currentInvitation.data.audioUrl;
+      const floatingBtn = document.getElementById('floating-audio-btn');
+      if (mp3Url && mp3Url !== 'none') {
+        if (bgAudioPlayer.src !== mp3Url) {
+          bgAudioPlayer.src = mp3Url;
+        }
+        bgAudioPlayer.muted = isAudioMuted;
+        bgAudioPlayer.volume = 0;
+        bgAudioPlayer.play().then(() => {
+          gsap.to(bgAudioPlayer, { volume: 0.8, duration: 2.2 });
+          if (floatingBtn) {
+            floatingBtn.classList.remove('hidden');
+            floatingBtn.classList.add('flex');
+          }
+          updateAudioButtonUI();
+        }).catch(() => {
+          if (floatingBtn) {
+            floatingBtn.classList.remove('hidden');
+            floatingBtn.classList.add('flex');
+          }
+        });
+      } else {
+        bgAudioPlayer.pause();
+        if (floatingBtn) floatingBtn.classList.add('hidden');
+      }
+    }
+
+    function toggleGlobalAudio() {
+      if (bgAudioPlayer.paused) {
+        isAudioMuted = false;
+        bgAudioPlayer.muted = false;
+        bgAudioPlayer.play();
+      } else {
+        isAudioMuted = !isAudioMuted;
+        bgAudioPlayer.muted = isAudioMuted;
+      }
+      updateAudioButtonUI();
+    }
+
+    function updateAudioButtonUI() {
+      const label = document.getElementById('audio-btn-label');
+      const waves = document.getElementById('audio-waves-icon');
+      if (!label || !waves) return;
+      if (isAudioMuted || bgAudioPlayer.paused) {
+        label.textContent = 'تشغيل الموسيقى 🔇';
+        waves.classList.add('opacity-30');
+      } else {
+        label.textContent = 'الموسيقى تعمل 🎵';
+        waves.classList.remove('opacity-30');
+      }
+    }
+
+    function handleAudioPresetChange(val) {
+      if (val === 'none') {
+        currentInvitation.data.audioUrl = '';
+        document.getElementById('edit-audio-url').value = '';
+        bgAudioPlayer.pause();
+      } else if (val) {
+        currentInvitation.data.audioUrl = val;
+        document.getElementById('edit-audio-url').value = val;
+      }
+    }
+
+    function handleLocalMp3Upload(input) {
+      const file = input.files && input.files[0];
+      if (!file) return;
+      const localUrl = URL.createObjectURL(file);
+      currentInvitation.data.audioUrl = localUrl;
+      document.getElementById('edit-audio-url').value = localUrl;
+      document.getElementById('uploaded-mp3-name').textContent = `تم اختيار: ${file.name}`;
+      playRoyalChimeAndMP3();
+    }
+
+    function testEditorAudioPreview() {
+      playRoyalChimeAndMP3();
+    }
+
+    // ==================== UI & GRIDS ====================
+    function renderCategoryFilters() {
+      const categories = ['all', 'graduation', 'graduation_project', 'wedding', 'engagement', 'henna', 'birthday'];
+      ['home-category-pills', 'gallery-category-pills'].forEach(containerId => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = categories.map(cat => {
+          const isActive = activeCategoryFilter === cat;
+          return `
+            <button onclick="setCategoryFilter('${cat}')"
+              class="px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer border ${
+                isActive
+                  ? 'bg-royalBlack text-champagne border-champagne shadow-md'
+                  : 'bg-pearl text-royalBlack/80 border-champagne/40 hover:border-antiqueGold'
+              }">
+              ${OCCASION_LABELS[cat]}
+            </button>
+          `;
+        }).join('');
+      });
+    }
+
+    function setCategoryFilter(cat) {
+      activeCategoryFilter = cat;
+      renderCategoryFilters();
+      renderTemplatesGrids();
+    }
+
+    function createCleanCardHTML(tpl) {
+      const categoryLabel = OCCASION_LABELS[tpl.category] || 'دعوة ملكية';
+      const modeObj = OPENING_EXPERIENCES[tpl.openingMode];
+      const svgIcon = CATEGORY_SVGS[tpl.category] || CATEGORY_SVGS.wedding;
+      return `
+        <div onclick="openTemplatePreview('${tpl.id}')"
+          class="group rounded-3xl bg-pearl border border-champagne/45 hover:border-antiqueGold transition-all duration-300 overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-xl cursor-pointer">
+          <div class="relative w-full aspect-[4/3] overflow-hidden flex flex-col items-center justify-center p-6 text-center"
+            style="background: radial-gradient(circle at 50% 35%, ${modeObj?.palette?.accent || '#123D32'} 0%, ${tpl.themeColor} 70%, #090A0F 100%);">
+            <div class="absolute inset-3.5 rounded-2xl border border-champagne/40 pointer-events-none"></div>
+            <span class="absolute top-5 right-5 z-10 px-3 py-1 rounded-full bg-royalBlack/85 border border-champagne/50 text-champagne text-[11px] font-bold">
+              ${categoryLabel}
+            </span>
+            <span class="absolute top-5 left-5 z-10 px-2.5 py-1 rounded-full bg-royalBlack/75 border border-champagne/40 text-champagne text-[10px] font-bold">
+              🎵 MP3 + 3D
+            </span>
+            <div class="relative z-10 w-16 h-16 rounded-full bg-royalBlack/85 border-2 border-champagne shadow-[0_0_30px_rgba(214,181,116,0.45)] flex items-center justify-center group-hover:scale-110 transition-transform mb-3">
+              ${svgIcon}
+            </div>
+            <span class="relative z-10 px-3 py-1 rounded-full bg-royalBlack/70 text-ivory text-[11px] font-semibold border border-champagne/30">
+              ${modeObj ? modeObj.titleAr : tpl.badge}
+            </span>
+          </div>
+          <div class="p-5 flex items-center justify-between gap-3 bg-pearl">
+            <div class="min-w-0">
+              <h3 class="text-base font-bold text-royalBlack font-amiri truncate">${tpl.name}</h3>
+              <p class="text-xs text-antiqueGold font-semibold mt-0.5 truncate">${categoryLabel}</p>
+            </div>
+            <button type="button" onclick="event.stopPropagation(); openTemplatePreview('${tpl.id}')"
+              class="px-4 py-2 rounded-xl bg-ivory group-hover:bg-royalBlack text-royalBlack group-hover:text-champagne border border-champagne/50 text-xs font-bold transition-all shrink-0 cursor-pointer">
+              معاينة 3D
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderTemplatesGrids() {
+      const filtered = activeCategoryFilter === 'all'
+        ? TEMPLATES
+        : TEMPLATES.filter(t => t.category === activeCategoryFilter);
+
+      const homeGrid = document.getElementById('home-templates-grid');
+      const galleryGrid = document.getElementById('gallery-templates-grid');
+      if (homeGrid) homeGrid.innerHTML = filtered.map(createCleanCardHTML).join('');
+      if (galleryGrid) galleryGrid.innerHTML = filtered.map(createCleanCardHTML).join('');
+
+      const gradCollection = TEMPLATES.filter(t => t.category === 'graduation' || t.category === 'graduation_project');
+      const gradGrid = document.getElementById('graduation-collection-grid');
+      if (gradGrid) gradGrid.innerHTML = gradCollection.map(createCleanCardHTML).join('');
+    }
+
+    function switchTab(tab) {
+      ['home', 'templates', 'graduation', 'editor'].forEach(id => {
+        const viewEl = document.getElementById(`view-${id}`);
+        const navEl = document.getElementById(`nav-${id}`);
+        if (viewEl) viewEl.classList.toggle('hidden', id !== tab);
+        if (navEl) {
+          navEl.className = id === tab
+            ? 'px-4 py-2.5 rounded-xl bg-royalBlack text-champagne transition-all cursor-pointer'
+            : 'px-4 py-2.5 rounded-xl hover:bg-ivory text-royalBlack/80 transition-all cursor-pointer';
+        }
+      });
+
+      if (tab === 'editor') {
+        populateEditorFields();
+        mountInteractive3DInvitation('phone-preview-mount', currentInvitation);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openEditorWithTemplate(tplId) {
+      const found = TEMPLATES.find(t => t.id === tplId) || TEMPLATES[0];
+      currentInvitation = JSON.parse(JSON.stringify(found));
+      switchTab('editor');
+    }
+
+    function populateEditorFields() {
+      const cat = currentInvitation.category;
+      document.getElementById('edit-category').value = cat;
+      document.getElementById('edit-title').value = currentInvitation.data.title || '';
+      document.getElementById('edit-primary-name').value = currentInvitation.data.primaryName || '';
+      document.getElementById('edit-secondary-name').value = currentInvitation.data.secondaryName || '';
+      document.getElementById('edit-university').value = currentInvitation.data.university || '';
+      document.getElementById('edit-college').value = currentInvitation.data.college || '';
+      document.getElementById('edit-degree').value = currentInvitation.data.degree || '';
+      document.getElementById('edit-major').value = currentInvitation.data.major || 'engineering';
+      document.getElementById('edit-quote').value = currentInvitation.data.quote || '';
+      document.getElementById('edit-body').value = currentInvitation.data.body || '';
+      document.getElementById('edit-date').value = currentInvitation.data.date || '';
+      document.getElementById('edit-time').value = currentInvitation.data.time || '';
+      document.getElementById('edit-venue').value = currentInvitation.data.venue || '';
+      document.getElementById('edit-city').value = currentInvitation.data.city || '';
+      document.getElementById('edit-map-url').value = currentInvitation.data.mapUrl || '';
+      document.getElementById('edit-audio-url').value = currentInvitation.data.audioUrl || '';
+
+      const isGrad = cat === 'graduation' || cat === 'graduation_project';
+      document.getElementById('grad-fields-container').classList.toggle('hidden', !isGrad);
+      document.getElementById('label-primary-name').textContent = isGrad ? 'اسم الخريج / صاحب المشروع' : 'الاسم الأول (العريس / صاحب الحفل)';
+      document.getElementById('label-secondary-name').textContent = isGrad ? 'الدفعة / المشرف العلمي' : 'الاسم الثاني (العروس / العائلة)';
+
+      renderEditorOpeningExperienceOptions();
+    }
+
+    function renderEditorOpeningExperienceOptions() {
+      const cat = currentInvitation.category;
+      const container = document.getElementById('editor-opening-modes');
+      const modes = Object.values(OPENING_EXPERIENCES).filter(m => m.categories.includes(cat));
+      container.innerHTML = modes.map(m => {
+        const selected = currentInvitation.openingMode === m.id;
+        return `
+          <button type="button" onclick="selectOpeningMode('${m.id}')"
+            class="p-3 rounded-xl text-right border transition-all cursor-pointer flex items-center justify-between gap-2 ${
+              selected
+                ? 'bg-royalBlack text-champagne border-champagne shadow-md'
+                : 'bg-pearl text-royalBlack border-champagne/40 hover:border-antiqueGold'
+            }">
+            <span class="text-xs font-bold">${m.titleAr}</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full ${selected ? 'bg-champagne text-royalBlack' : 'bg-ivory text-antiqueGold'} font-bold">3D</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function handleEditorCategoryChange(newCat) {
+      currentInvitation.category = newCat;
+      const validModes = Object.values(OPENING_EXPERIENCES).filter(m => m.categories.includes(newCat));
+      if (validModes.length && !validModes.some(m => m.id === currentInvitation.openingMode)) {
+        currentInvitation.openingMode = validModes[0].id;
+      }
+      populateEditorFields();
+      mountInteractive3DInvitation('phone-preview-mount', currentInvitation);
+    }
+
+    function handleMajorChange(newMajor) {
+      currentInvitation.data.major = newMajor;
+      mountInteractive3DInvitation('phone-preview-mount', currentInvitation);
+    }
+
+    function selectOpeningMode(modeId) {
+      currentInvitation.openingMode = modeId;
+      renderEditorOpeningExperienceOptions();
+      mountInteractive3DInvitation('phone-preview-mount', currentInvitation);
+    }
+
+    function selectQuickQuote(
